@@ -1,0 +1,249 @@
+\hypertarget{class_macierz}{}\doxysection{Macierz$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$ Class Template Reference}
+\label{class_macierz}\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+
+
+Szablon macierzy. Szablon ten jest szablonem klasy macierz. Zawiera on elementy potrzebne do utworzenia macierzy oraz wykonywania na niej różnych operacji. Zawiera on tablicę o rozmiarach odopowiadających naszej macierzy oraz kąty potrzebne do obrotów 2D i 3D (kąty X, Y, Z).  
+
+
+
+
+{\ttfamily \#include $<$Macierz.\+hh$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_macierz_a1f402210b496c2aff462c58613052975}{Macierz}} (Templ\+\_\+\+Typ tmp\mbox{[}Templ\+\_\+\+Rozmiar\mbox{]}\mbox{[}Templ\+\_\+\+Rozmiar\mbox{]})
+\begin{DoxyCompactList}\small\item\em Konstruktor parametryczny klasy macierz. Konstruktor ten nadaje wartości macierzy poprzez tablicę odpowiadającą jej wymiarom. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a722bc086dd0f12fbc0f34dcb0246e6bc}\label{class_macierz_a722bc086dd0f12fbc0f34dcb0246e6bc}} 
+\mbox{\hyperlink{class_macierz_a722bc086dd0f12fbc0f34dcb0246e6bc}{Macierz}} ()
+\begin{DoxyCompactList}\small\item\em Konstruktor bezparametryczny klasy macierz. Konstruktor wypełnia macierz zerami. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_macierz}{Macierz}} \mbox{\hyperlink{class_macierz_ae15b7b6824830232cbca3e67b166a0e8}{operator+}} (\mbox{\hyperlink{class_macierz}{Macierz}} tmp)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora dodawania. Przeciążenie operatora dodawania, aby umożliwić dodawanie dwóch macierzy. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_macierz}{Macierz}} \mbox{\hyperlink{class_macierz_a7a94716cbc755234ac5b262bf9d0be46}{operator-\/}} (\mbox{\hyperlink{class_macierz}{Macierz}} tmp)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora odejmowania. Przeciążenie operatora odejmowania, aby umożliwić odejmowanie dwóch macierzy. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_macierz}{Macierz}} \mbox{\hyperlink{class_macierz_a36e87998f8a55df5e348998ca5986be2}{operator$\ast$}} (\mbox{\hyperlink{class_macierz}{Macierz}} tmp)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora mnożenia Macierz$\ast$\+Macierz. Przeciążenie operatora mnożenia, aby umożliwić mnożenie dwóch macierzy. \end{DoxyCompactList}\item 
+Templ\+\_\+\+Typ \& \mbox{\hyperlink{class_macierz_a8bf536ce83525919ec6c076d477d5340}{operator()}} (unsigned int row, unsigned int column)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora () set. Umożliwia zmienienie wartości konkretnego elementu macierzy. \end{DoxyCompactList}\item 
+const Templ\+\_\+\+Typ \& \mbox{\hyperlink{class_macierz_a5c2afc47782a3f39a68175d6bd470014}{operator()}} (unsigned int row, unsigned int column) const
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora () get. Umożliwia podgląd wartości konkretnego elementu macierzy. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_ac1fe992bc10f99205689fff9d6f37462}\label{class_macierz_ac1fe992bc10f99205689fff9d6f37462}} 
+void \mbox{\hyperlink{class_macierz_ac1fe992bc10f99205689fff9d6f37462}{Stopien\+Na\+Radian}} ()
+\begin{DoxyCompactList}\small\item\em Zamaina stopni na radian 2D. Metoda zamieniająca wartość stopni na stopnie w radianach, aby umożliwić obrót 2D. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a9f1fcc0635fef4f16839f99b4036fa7b}\label{class_macierz_a9f1fcc0635fef4f16839f99b4036fa7b}} 
+void \mbox{\hyperlink{class_macierz_a9f1fcc0635fef4f16839f99b4036fa7b}{Stopien\+Na\+RadianX}} ()
+\begin{DoxyCompactList}\small\item\em Zamaina stopni na radian 3D wokół OX. Metoda zamieniająca wartość stopni na stopnie w radianach, aby umożliwić obrót 3D wokół osi OX. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a920ebb5e2646060acc78441c9645282d}\label{class_macierz_a920ebb5e2646060acc78441c9645282d}} 
+void \mbox{\hyperlink{class_macierz_a920ebb5e2646060acc78441c9645282d}{Stopien\+Na\+RadianY}} ()
+\begin{DoxyCompactList}\small\item\em Zamaina stopni na radian 3D wokół OY. Metoda zamieniająca wartość stopni na stopnie w radianach, aby umożliwić obrót 3D wokół osi OY. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a417b5fa5a737b4793b2dd670b8468ffb}\label{class_macierz_a417b5fa5a737b4793b2dd670b8468ffb}} 
+void \mbox{\hyperlink{class_macierz_a417b5fa5a737b4793b2dd670b8468ffb}{Stopien\+Na\+RadianZ}} ()
+\begin{DoxyCompactList}\small\item\em Zamaina stopni na radian 3D wokół OZ. Metoda zamieniająca wartość stopni na stopnie w radianach, aby umożliwić obrót 3D wokół osi OZ. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a84b4079c83455a2cb93220560402752d}\label{class_macierz_a84b4079c83455a2cb93220560402752d}} 
+void \mbox{\hyperlink{class_macierz_a84b4079c83455a2cb93220560402752d}{Oblicz\+\_\+\+Macierz\+\_\+\+Obrotu}} ()
+\begin{DoxyCompactList}\small\item\em Metoda obliczająca macierz obrotu 2D. Metoda umożliwiająca obliczenie macierzy obrotu umożliwiającej obrót 2D. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_aa2ae238d9e39ac561365fe1c5b35cdeb}\label{class_macierz_aa2ae238d9e39ac561365fe1c5b35cdeb}} 
+void \mbox{\hyperlink{class_macierz_aa2ae238d9e39ac561365fe1c5b35cdeb}{Oblicz\+\_\+\+Macierz\+\_\+\+ObrotuX}} ()
+\begin{DoxyCompactList}\small\item\em Metoda obliczająca macierz obrotu 3D OX. Metoda umożliwiająca obliczenie macierzy obrotu umożliwiającej obrót 3D wokół osi OX. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a788cd45a161a843228051753f647e199}\label{class_macierz_a788cd45a161a843228051753f647e199}} 
+void \mbox{\hyperlink{class_macierz_a788cd45a161a843228051753f647e199}{Oblicz\+\_\+\+Macierz\+\_\+\+ObrotuY}} ()
+\begin{DoxyCompactList}\small\item\em Metoda obliczająca macierz obrotu 3D OY. Metoda umożliwiająca obliczenie macierzy obrotu umożliwiającej obrót 3D wokół osi OY. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a4e1815ee04edb01cb9969fccb3017a8a}\label{class_macierz_a4e1815ee04edb01cb9969fccb3017a8a}} 
+void \mbox{\hyperlink{class_macierz_a4e1815ee04edb01cb9969fccb3017a8a}{Oblicz\+\_\+\+Macierz\+\_\+\+ObrotuZ}} ()
+\begin{DoxyCompactList}\small\item\em Metoda obliczająca macierz obrotu 3D OZ. Metoda umożliwiająca obliczenie macierzy obrotu umożliwiającej obrót 3D wokół osi OZ. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a854b2c973cf53c016a020f97c6e06e26}\label{class_macierz_a854b2c973cf53c016a020f97c6e06e26}} 
+void \mbox{\hyperlink{class_macierz_a854b2c973cf53c016a020f97c6e06e26}{przypisz\+\_\+stopnie}} (double stopnie)
+\begin{DoxyCompactList}\small\item\em Metoda przypisująca stopnie 2D. Metoda przypisuje stopnie podane przez użytkownika do stopni macierzy, aby umożliwić obrót 2D. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a62d23070eaa4c30ab47ef0d67aca8f2b}\label{class_macierz_a62d23070eaa4c30ab47ef0d67aca8f2b}} 
+void \mbox{\hyperlink{class_macierz_a62d23070eaa4c30ab47ef0d67aca8f2b}{przypisz\+\_\+stopnieX}} (double stopnie)
+\begin{DoxyCompactList}\small\item\em Metoda przypisująca stopnie 3D OX. Metoda przypisuje stopnie podane przez użytkownika do stopni macierzy, aby umożliwić obrót 3D wokół osi OX. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_a66965ae9527eb631729e72d90ec22727}\label{class_macierz_a66965ae9527eb631729e72d90ec22727}} 
+void \mbox{\hyperlink{class_macierz_a66965ae9527eb631729e72d90ec22727}{przypisz\+\_\+stopnieY}} (double stopnie)
+\begin{DoxyCompactList}\small\item\em Metoda przypisująca stopnie 3D OY. Metoda przypisuje stopnie podane przez użytkownika do stopni macierzy, aby umożliwić obrót 3D wokół osi OY. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_macierz_acb4285abb512b08e7a773b77ea5b407a}\label{class_macierz_acb4285abb512b08e7a773b77ea5b407a}} 
+void \mbox{\hyperlink{class_macierz_acb4285abb512b08e7a773b77ea5b407a}{przypisz\+\_\+stopnieZ}} (double stopnie)
+\begin{DoxyCompactList}\small\item\em Metoda przypisująca stopnie 3D OZ. Metoda przypisuje stopnie podane przez użytkownika do stopni macierzy, aby umożliwić obrót 3D wokół osi OZ. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_macierz_a531f90669d173d208c8ad8980e90c535}{operator==}} (const \mbox{\hyperlink{class_macierz}{Macierz}} tmp) const
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora porównania dla macierzy. Przeciążenie operatora porównania umożliwiające porównywanie dwóch macierzy, potrzebne przede wszystkim do testów. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Templ\+\_\+\+Typ, unsigned int Templ\+\_\+\+Rozmiar$>$\newline
+class Macierz$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$}
+
+Szablon macierzy. Szablon ten jest szablonem klasy macierz. Zawiera on elementy potrzebne do utworzenia macierzy oraz wykonywania na niej różnych operacji. Zawiera on tablicę o rozmiarach odopowiadających naszej macierzy oraz kąty potrzebne do obrotów 2D i 3D (kąty X, Y, Z). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & tablica przechowująca wartości macierzy \\
+\hline
+{\em kat\+\_\+stopnie} & kąt odpowiadający stopniom przy obrotach 2D \\
+\hline
+{\em kat\+\_\+radian} & kąt odpowiadający stopniom w radianach przy obrotach 2D \\
+\hline
+{\em kat\+\_\+stopnieX} & kąt odpowiadający stopniom przy obrotach 3D w obrotach wokół osi OX \\
+\hline
+{\em kat\+\_\+radianX} & kąt odpowiadający stopniom w radianach przy obrotach 3D w obrotach wokół osi OX \\
+\hline
+{\em kat\+\_\+stopnieY} & kąt odpowiadający stopniom przy obrotach 3D w obrotach wokół osi OY \\
+\hline
+{\em kat\+\_\+radianY} & kat\+\_\+radianX kąt odpowiadający stopniom w radianach przy obrotach 3D w obrotach wokół osi OY \\
+\hline
+{\em kat\+\_\+stopnieZ} & kąt odpowiadający stopniom przy obrotach 3D w obrotach wokół osi OZ \\
+\hline
+{\em kat\+\_\+radianZ} & kat\+\_\+radianX kąt odpowiadający stopniom w radianach przy obrotach 3D w obrotach wokół osi OZ \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_macierz_a1f402210b496c2aff462c58613052975}\label{class_macierz_a1f402210b496c2aff462c58613052975}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!Macierz@{Macierz}}
+\index{Macierz@{Macierz}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{Macierz()}{Macierz()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::\mbox{\hyperlink{class_macierz}{Macierz}} (\begin{DoxyParamCaption}\item[{Templ\+\_\+\+Typ}]{tmp\mbox{[}\+Templ\+\_\+\+Rozmiar\mbox{]}\mbox{[}\+Templ\+\_\+\+Rozmiar\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Konstruktor parametryczny klasy macierz. Konstruktor ten nadaje wartości macierzy poprzez tablicę odpowiadającą jej wymiarom. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & tablica poprzez którą będziemy nadawać wartości macierzy \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_macierz_a8bf536ce83525919ec6c076d477d5340}\label{class_macierz_a8bf536ce83525919ec6c076d477d5340}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+Templ\+\_\+\+Typ \& \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator() (\begin{DoxyParamCaption}\item[{unsigned int}]{row,  }\item[{unsigned int}]{column }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora () set. Umożliwia zmienienie wartości konkretnego elementu macierzy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & odpowiednik numeru wiersza. \\
+\hline
+{\em column} & odpowiednik numeru kolumny \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wartość elementu, który nas interesuje. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_macierz_a5c2afc47782a3f39a68175d6bd470014}\label{class_macierz_a5c2afc47782a3f39a68175d6bd470014}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator()@{operator()}}
+\index{operator()@{operator()}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+const Templ\+\_\+\+Typ \& \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator() (\begin{DoxyParamCaption}\item[{unsigned int}]{row,  }\item[{unsigned int}]{column }\end{DoxyParamCaption}) const}
+
+
+
+Przeciążenie operatora () get. Umożliwia podgląd wartości konkretnego elementu macierzy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em row} & odpowiednik numeru wiersza. \\
+\hline
+{\em column} & odpowiednik numeru kolumny \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wartość elementu, który nas interesuje. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_macierz_a36e87998f8a55df5e348998ca5986be2}\label{class_macierz_a36e87998f8a55df5e348998ca5986be2}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$ \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$}]{tmp }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora mnożenia Macierz$\ast$\+Macierz. Przeciążenie operatora mnożenia, aby umożliwić mnożenie dwóch macierzy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & macierz odpowiadająca jednej z mnożonych macierzy. \\
+\hline
+{\em result} & macierz pomocnicza odpowiadająca macierzy wynikowej mnożenia. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Wynik mnożenia w postaci macierzy result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_macierz_ae15b7b6824830232cbca3e67b166a0e8}\label{class_macierz_ae15b7b6824830232cbca3e67b166a0e8}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$ \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$}]{tmp }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora dodawania. Przeciążenie operatora dodawania, aby umożliwić dodawanie dwóch macierzy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & macierz odpowiadająca jednej z dodawanych macierzy. \\
+\hline
+{\em result} & macierz pomocnicza odpowiadająca macierzy wynikowej dodawania. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Wynik dodawania w postaci macierzy result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_macierz_a7a94716cbc755234ac5b262bf9d0be46}\label{class_macierz_a7a94716cbc755234ac5b262bf9d0be46}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$ \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$}]{tmp }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora odejmowania. Przeciążenie operatora odejmowania, aby umożliwić odejmowanie dwóch macierzy. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & macierz odpowiadająca jednej z odejmowanych macierzy. \\
+\hline
+{\em result} & macierz pomocnicza odpowiadająca macierzy wynikowej odejmowania. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Wynik odejmowania w postaci macierzy result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_macierz_a531f90669d173d208c8ad8980e90c535}\label{class_macierz_a531f90669d173d208c8ad8980e90c535}} 
+\index{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$@{Macierz$<$ Templ\_Typ, Templ\_Rozmiar $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ , unsigned int Templ\+\_\+\+Rozmiar$>$ \\
+bool \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_macierz}{Macierz}}$<$ Templ\+\_\+\+Typ, Templ\+\_\+\+Rozmiar $>$}]{tmp }\end{DoxyParamCaption}) const}
+
+
+
+Przeciążenie operatora porównania dla macierzy. Przeciążenie operatora porównania umożliwiające porównywanie dwóch macierzy, potrzebne przede wszystkim do testów. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & macierz odpowiadająca jednej z porównywanych macierzy \\
+\hline
+{\em liczenie} & ilość \char`\"{}punktów\char`\"{} odpowiadających ilości zgadzających się elementów macierzy, powinna odpowiadać ilości elementów macierzy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca true albo false w zależności czy ilośc punktów odpowiada elementom macierzy. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Macierz.\+hh\end{DoxyCompactItemize}

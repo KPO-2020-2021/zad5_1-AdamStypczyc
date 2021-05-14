@@ -3,33 +3,31 @@
 // users, this can be left out.
 #ifdef ENABLE_DOCTEST_IN_LIBRARY
 #define DOCTEST_CONFIG_IMPLEMENT
-#include "doctest.h"
+#include "../tests/doctest/doctest.h"
 #endif
 
 #include <iostream>
+#include <iomanip>
 #include <stdlib.h>
+#include <fstream>
+#include <string>
 
 #include "exampleConfig.h"
 #include "example.h"
+#include "Wektor3D.hh"
+#include "Macierz.hh"
+#include "Prostopadloscian.hh"
+#include "../include/lacze_do_gnuplota.hh"
+#include "obsluga.hh"
 
-/*
+/*!
  * Simple main program that demontrates how access
  * CMake definitions (here the version number) from source code.
+ * 
+ * EDIT: dodane kreowanie wektorow i macierzy plus obsluga lacza do gnuplota
  */
-int main() {
-  std::cout << "C++ Boiler Plate v"
-            << PROJECT_VERSION_MAJOR
-            << "."
-            << PROJECT_VERSION_MINOR
-            << "."
-            << PROJECT_VERSION_PATCH
-            << "."
-            << PROJECT_VERSION_TWEAK
-            << std::endl;
-  std::system("cat ../LICENSE");
 
-  // Bring in the dummy class from the example source,
-  // just to show that it is accessible from main.cpp.
-  Dummy d = Dummy();
-  return d.doSomething() ? 0 : -1;
+int main()
+{
+       menu();
 }

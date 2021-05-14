@@ -1,0 +1,180 @@
+\hypertarget{class_wektor}{}\doxysection{Wektor$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ Class Template Reference}
+\label{class_wektor}\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+
+
+Szablon wektora. Szablon ten jest szablonem klasy \mbox{\hyperlink{class_wektor}{Wektor}}. Zawiera on elementy potrzebne do utworzenia wektora oraz wykonywania na nim różnych operacji. Zawiera on tablicę o rozmiarach odopowiadających naszemu wektorowi.  
+
+
+
+
+{\ttfamily \#include $<$wektor.\+hh$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_wektor_aae1eb498ed2550525c2cc9c65d52745e}\label{class_wektor_aae1eb498ed2550525c2cc9c65d52745e}} 
+\mbox{\hyperlink{class_wektor_aae1eb498ed2550525c2cc9c65d52745e}{Wektor}} ()
+\begin{DoxyCompactList}\small\item\em Konstruktor bezparametryczny klasy wektor. Przypisuje wszystkim elementom tablicy wektorek 0. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_wektor_a5fc23f984fd2eb4788e561fcafa1c1fe}{Wektor}} (const std\+::initializer\+\_\+list$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor $>$ \&Lista\+Wsp)
+\begin{DoxyCompactList}\small\item\em Konstruktor parametryczny klasy wektor. Przypisuje wszystkim elementom tablicy wektorek odpowiednie wartości podane w liście. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_wektor_a4c6910a4ce56325cef1fc89ce5c436a7}\label{class_wektor_a4c6910a4ce56325cef1fc89ce5c436a7}} 
+Templ\+\_\+\+Typ\+\_\+\+Wektor {\bfseries operator\mbox{[}$\,$\mbox{]}} (unsigned int Index) const
+\item 
+\mbox{\Hypertarget{class_wektor_ae57dfa8496b4df4ef85ec67b559d97a8}\label{class_wektor_ae57dfa8496b4df4ef85ec67b559d97a8}} 
+Templ\+\_\+\+Typ\+\_\+\+Wektor \& {\bfseries operator\mbox{[}$\,$\mbox{]}} (unsigned int Index)
+\item 
+\mbox{\hyperlink{class_wektor}{Wektor}} \mbox{\hyperlink{class_wektor_a4bd732d99786870aa38d18dbc70de8ec}{operator+}} (const \mbox{\hyperlink{class_wektor}{Wektor}} \&v)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora dodawania dla wektora. Przeciążenie umożliwiające dodawanie dwóch wektorów do siebie. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_wektor}{Wektor}} \mbox{\hyperlink{class_wektor_ad970b50d0b351d5201d56c3edcc06c3d}{operator-\/}} (const \mbox{\hyperlink{class_wektor}{Wektor}} \&v)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora odejmowania dla wektora. Przeciążenie umożliwiające odejmowanie dwóch wektorów od siebie. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_wektor}{Wektor}} \mbox{\hyperlink{class_wektor_ac4d71482f3c0acce5fe888fb80abc4c4}{operator$\ast$}} (const Templ\+\_\+\+Typ\+\_\+\+Wektor \&tmp)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora mnożenia dla wektora. Przeciążenie umożliwiające mnożenie wektora razy wartość typu odpowiadającego typowi teblicy wektorek. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_wektor}{Wektor}} \mbox{\hyperlink{class_wektor_ab748d5dae960ff468f85c17015b99092}{operator/}} (const Templ\+\_\+\+Typ\+\_\+\+Wektor \&tmp)
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora dzielenia dla wektora. Przeciążenie umożliwiające dzielenie wektora przez wartość typu odpowiadającego typowi teblicy wektorek. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_wektor_a58df1b7c1709d159244719b48da1597e}{operator==}} (const \mbox{\hyperlink{class_wektor}{Wektor}} V) const
+\begin{DoxyCompactList}\small\item\em Przeciążenie operatora porównania dla wektora. Przeciążenie operatora porównania umożliwiające porównywanie dwóch wektorów, potrzebne przede wszystkim do testów. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor, unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$\newline
+class Wektor$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$}
+
+Szablon wektora. Szablon ten jest szablonem klasy \mbox{\hyperlink{class_wektor}{Wektor}}. Zawiera on elementy potrzebne do utworzenia wektora oraz wykonywania na nim różnych operacji. Zawiera on tablicę o rozmiarach odopowiadających naszemu wektorowi. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em wektorek} & tablica w której będą zapisywane wartości wektora \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_wektor_a5fc23f984fd2eb4788e561fcafa1c1fe}\label{class_wektor_a5fc23f984fd2eb4788e561fcafa1c1fe}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!Wektor@{Wektor}}
+\index{Wektor@{Wektor}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{Wektor()}{Wektor()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+\mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::\mbox{\hyperlink{class_wektor}{Wektor}} (\begin{DoxyParamCaption}\item[{const std\+::initializer\+\_\+list$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ $>$ \&}]{Lista\+Wsp }\end{DoxyParamCaption})}
+
+
+
+Konstruktor parametryczny klasy wektor. Przypisuje wszystkim elementom tablicy wektorek odpowiednie wartości podane w liście. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Lista\+Wsp} & lista z wartościami, które mają być przypisane do wektora. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_wektor_ac4d71482f3c0acce5fe888fb80abc4c4}\label{class_wektor_ac4d71482f3c0acce5fe888fb80abc4c4}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+\mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::operator$\ast$ (\begin{DoxyParamCaption}\item[{const Templ\+\_\+\+Typ\+\_\+\+Wektor$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \&}]{tmp }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora mnożenia dla wektora. Przeciążenie umożliwiające mnożenie wektora razy wartość typu odpowiadającego typowi teblicy wektorek. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & wartość razy która mnożymy \\
+\hline
+{\em result} & nowopowstały wektor będący wynikiem mnożenia \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wektor result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_wektor_a4bd732d99786870aa38d18dbc70de8ec}\label{class_wektor_a4bd732d99786870aa38d18dbc70de8ec}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+\mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \&}]{v }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora dodawania dla wektora. Przeciążenie umożliwiające dodawanie dwóch wektorów do siebie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & wektor odpowiadający jednemu z dodawanych wektorów \\
+\hline
+{\em result} & nowopowstały wektor będący wynikiem dodawania \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wektor result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_wektor_ad970b50d0b351d5201d56c3edcc06c3d}\label{class_wektor_ad970b50d0b351d5201d56c3edcc06c3d}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/()}{operator-()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+\mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \&}]{v }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora odejmowania dla wektora. Przeciążenie umożliwiające odejmowanie dwóch wektorów od siebie. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & wektor odpowiadający jednemu z odejmowanych wektorów \\
+\hline
+{\em result} & nowopowstały wektor będący wynikiem odejmowania \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wektor result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_wektor_ab748d5dae960ff468f85c17015b99092}\label{class_wektor_ab748d5dae960ff468f85c17015b99092}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!operator/@{operator/}}
+\index{operator/@{operator/}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{operator/()}{operator/()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+\mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::operator/ (\begin{DoxyParamCaption}\item[{const Templ\+\_\+\+Typ\+\_\+\+Wektor$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$ \&}]{tmp }\end{DoxyParamCaption})}
+
+
+
+Przeciążenie operatora dzielenia dla wektora. Przeciążenie umożliwiające dzielenie wektora przez wartość typu odpowiadającego typowi teblicy wektorek. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tmp} & wartość przez którą mnożymy \\
+\hline
+{\em result} & nowopowstały wektor będący wynikiem dzielenia \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca wektor result. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_wektor_a58df1b7c1709d159244719b48da1597e}\label{class_wektor_a58df1b7c1709d159244719b48da1597e}} 
+\index{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$@{Wektor$<$ Templ\_Typ\_Wektor, Templ\_Rozmiar\_Wektor $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily template$<$typename Templ\+\_\+\+Typ\+\_\+\+Wektor , unsigned int Templ\+\_\+\+Rozmiar\+\_\+\+Wektor$>$ \\
+bool \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_wektor}{Wektor}}$<$ Templ\+\_\+\+Typ\+\_\+\+Wektor, Templ\+\_\+\+Rozmiar\+\_\+\+Wektor $>$}]{V }\end{DoxyParamCaption}) const}
+
+
+
+Przeciążenie operatora porównania dla wektora. Przeciążenie operatora porównania umożliwiające porównywanie dwóch wektorów, potrzebne przede wszystkim do testów. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em V} & wektor odpowiadający jednemu z porównywanych wektorów \\
+\hline
+{\em liczenie} & ilość \char`\"{}punktów\char`\"{} odpowiadających ilości zgadzających się elementów wektora, powinna odpowiadać ilości elementów wektora \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zwraca true albo false w zależności czy ilośc punktów odpowiada elementom wektora. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+wektor.\+hh\end{DoxyCompactItemize}
