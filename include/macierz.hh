@@ -28,6 +28,7 @@ public:
     Macierz operator+(Macierz tmp);
     Macierz operator-(Macierz tmp);
     Macierz operator*(Macierz tmp);
+    Wektor3D operator*(Wektor3D tmp);
 
     Templ_Typ &operator()(unsigned int row, unsigned int column);
 
@@ -134,7 +135,28 @@ Macierz<Templ_Typ, Templ_Rozmiar> Macierz<Templ_Typ, Templ_Rozmiar>::operator*(M
     }
     return result;
 }
-
+template <typename Templ_Typ, unsigned int Templ_Rozmiar>
+/*!
+ * \brief Przeciążenie operatora mnożenia Macierz*Wektor3D.
+ * Przeciążenie operatora mnożenia, aby umożliwić mnożenie macierzy i wektora3D.
+ * \param tmp wektor3D mnożony przez macierz.
+ * \param result wynikowy wektor3D 
+ * \return Wynik mnożenia w postaci wektora3D result.
+ */
+Wektor3D Macierz<Templ_Typ, Templ_Rozmiar>::operator*(Wektor3D tmp)
+{
+    assert(Templ_Rozmiar==3);
+    Wektor3D result;
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            result[i] += value[i][j] * tmp[j];
+        }
+    }
+    
+    return result;
+}
 template <typename Templ_Typ, unsigned int Templ_Rozmiar>
 /*!
  * \brief Przeciążenie operatora () set.

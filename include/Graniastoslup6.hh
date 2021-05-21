@@ -9,6 +9,7 @@ class Graniastoslup6 : public Graniastoslup
 {
 public:
     double promien;
+    Graniastoslup6();
     Graniastoslup6(Wektor3D poczatek, double h, double r);
 };
 /*!
