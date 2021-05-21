@@ -7,4 +7,29 @@
  * Deklaracja macierzy 3D.
  */
 typedef Macierz<double, 3> Macierz3x3;
-
+/*!
+ * \brief Zamaina stopni na radian 3D wokół OZ.
+ * Funkcja zamieniająca wartość stopni na stopnie w radianach, aby umożliwić obrót 3D wokół osi OZ.  
+ */
+double StopienNaRadianZ(double kat_stopnieZ)
+{
+    double kat_radianZ;
+    kat_radianZ = kat_stopnieZ * M_PI / 180;
+    return kat_radianZ;
+}
+/*!
+ * \brief Funkcja obliczająca macierz obrotu 3D OZ.
+ * Funkcja umożliwiająca obliczenie macierzy obrotu umożliwiającej obrót 3D wokół osi OZ. 
+ */
+void Oblicz_Macierz_ObrotuZ(double kat_radianZ, Macierz3x3 &Mac)
+{
+    Mac(0,0) = cos(kat_radianZ);
+    Mac(0,1) = -sin(kat_radianZ);
+    Mac(0,2) = 0;
+    Mac(1,0) = sin(kat_radianZ);
+    Mac(1,1) = cos(kat_radianZ);
+    Mac(1,2) = 0;
+    Mac(2,0) = 0;
+    Mac(2,1) = 0;
+    Mac(2,2) = 1;
+}

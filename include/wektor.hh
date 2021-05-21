@@ -18,7 +18,9 @@ class Wektor
     Templ_Typ_Wektor wektorek[Templ_Rozmiar_Wektor];
 
 public:
+    static int ilosc_tymczasowych, ilosc_stworzonych;
     Wektor();
+    ~Wektor();
     Wektor(const std::initializer_list<Templ_Typ_Wektor> &ListaWsp);
     Templ_Typ_Wektor operator[](unsigned int Index) const
     {
@@ -42,18 +44,28 @@ public:
     bool operator==(const Wektor V) const;
 };
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+int Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::ilosc_stworzonych = 0;
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+int Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::ilosc_tymczasowych = 0;
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
  * \brief Konstruktor bezparametryczny klasy wektor.
  * Przypisuje wszystkim elementom tablicy wektorek 0.
  */
 Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::Wektor()
 {
+    ilosc_tymczasowych++;
+    ilosc_stworzonych++;
     for (Templ_Typ_Wektor &wektork_i : wektorek)
     {
         wektork_i = 0;
     }
 }
-
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::~Wektor()
+{
+    ilosc_tymczasowych--;
+}
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
  * \brief Konstruktor parametryczny klasy wektor.
@@ -63,6 +75,7 @@ template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::Wektor(const std::initializer_list<Templ_Typ_Wektor> &ListaWsp) : Wektor()
 {
     assert(ListaWsp.size() <= Templ_Rozmiar_Wektor);
+    ilosc_tymczasowych++;
     int index = -1;
     for (double wartosc_i : ListaWsp)
     {

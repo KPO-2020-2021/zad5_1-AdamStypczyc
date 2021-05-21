@@ -11,15 +11,14 @@
 class Graniastoslup
 {
 protected:
-    int SIZE;
     std::vector<Wektor3D> wspol;
 
 public:
-    Graniastoslup();                                                            
-    Wektor3D &operator[](int i);                                                   
-    const Wektor3D operator[](int i) const;                                        
-    Graniastoslup operator+(const Wektor3D translacja);                         
-    void dlugosc();                                                                //sprawdzanie długości boków po obrocie
+    Graniastoslup();
+    ~Graniastoslup();
+    Wektor3D &operator[](int i);
+    const Wektor3D operator[](int i) const;
+    Graniastoslup operator+(const Wektor3D translacja); //sprawdzanie długości boków po obrocie
     void wyswietl_wspolrzedne();
     Graniastoslup operator*(Macierz3x3 Macierz_obrotu); //mnożenie prostokąt razy macierz
     Graniastoslup &operator*(double skala);
@@ -30,12 +29,18 @@ public:
  */
 Graniastoslup::Graniastoslup()
 {
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < (int)wspol.size(); i++)
     {
         wspol[i] = Wektor3D();
     }
 }
-
+/*!
+ * \brief Destruktor klasy Graniastoslup.
+ */
+Graniastoslup::~Graniastoslup()
+{
+    wspol.clear();
+}
 /*!
  * \brief Przeciążenie operatora [] set.
  * Umożliwia zmianę wartości poszczególnej wszpółrzędnej prostopadłościanu.
@@ -83,8 +88,8 @@ Graniastoslup Graniastoslup::operator*(Macierz3x3 Macierz_obrotu)
     Graniastoslup wynik;
     for (int i = 0; i < SIZE; i++)
     {
-    for (int j = 0; j < SIZE; j++)
-        wynik[i][j] += wspol[i][j]* Macierz_obrotu(i,j) ;
+        for (int j = 0; j < SIZE; j++)
+            wynik[i][j] += wspol[i][j] * Macierz_obrotu(i, j);
     }
     return wynik;
 }
@@ -106,7 +111,6 @@ Graniastoslup &Graniastoslup::operator*(double skala)
  */
 void Graniastoslup::wyswietl_wspolrzedne()
 {
-      for (int i = 0; i < SIZE; ++i)
-    std::cout << std::setw(20) << std::fixed << std::setprecision(10) << wspol[i] << std::endl;
- 
+    for (int i = 0; i < SIZE; ++i)
+        std::cout << std::setw(20) << std::fixed << std::setprecision(10) << wspol[i] << std::endl;
 }

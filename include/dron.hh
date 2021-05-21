@@ -1,15 +1,24 @@
 #pragma once
+#include <iomanip>
+#include <fstream>
+#include <string>
 #include "Graniastoslup6.hh"
 #include "Prostopadloscian.hh"
+#include "ObiektSceny.hh"
+#include <unistd.h>
+#include <cmath>
+#include <ctime>
+#include <assert.h>
+#include <memory>
 
 class dron: public Graniastoslup6
 {
-    Wektor3D Polozenie;
-    Wektor3D sciezka[4];
-    double kat_orientacji;
     Prostopadloscian KorpusDrona;
     Graniastoslup6 RotorDrona[4];
-
+    Macierz3x3 MacObrot;
+    Macierz3x3 MacObrot2[2];
+    int index;
+    std::vector<std::string> pliki;
 public:
     dron();
     dron(Prostopadloscian korpus, Graniastoslup6 rotory[4], Wektor3D przesuniecie_korpusu_wzglXY);
