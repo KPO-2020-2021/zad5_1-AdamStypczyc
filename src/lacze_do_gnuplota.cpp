@@ -63,9 +63,9 @@ namespace PzG {
    _TrybRys = TR_2D;
    WyswietlajKomunikatyBledow();
    _Wyjscie_GNUPlota = _Wejscie_GNUPlota = -1; 
-   UstawZakresX(0,350);
-   UstawZakresY(0,350);
-   UstawZakresZ(0,350);
+   UstawZakresX(0,750);
+   UstawZakresY(0,750);
+   UstawZakresZ(0,750);
    UstawRotacjeXZ(60,30);
    UstawSkaleXZ(1,1);
  }

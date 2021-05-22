@@ -46,7 +46,7 @@ void Obiekt_Sceny::stworz_siatke()
         poczatek[1] = poczatek[1] + 50;
     }
 }
-std::ostream operator<<(std::ostream &Strm, Obiekt_Sceny podloze)
+std::ostream operator <<(std::ostream &Strm, Obiekt_Sceny podloze)
 {
     for (int i = 0; i < 64; ++i)
     {
@@ -63,4 +63,6 @@ std::ostream operator<<(std::ostream &Strm, Obiekt_Sceny podloze)
     {
         Strm << podloze[i] << podloze[i + 8] << podloze[i + 16] << podloze[i + 24] << podloze[i + 32] << podloze[i + 40] << podloze[i + 48] << podloze[i + 56] << std::endl;
     }
+    
+    return Strm;
 }
