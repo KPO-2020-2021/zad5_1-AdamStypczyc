@@ -18,7 +18,7 @@
 #include "Macierz.hh"
 #include "Prostopadloscian.hh"
 #include "../include/lacze_do_gnuplota.hh"
-#include "obsluga.hh"
+#include "Scena.hh"
 
 /*!
  * Simple main program that demontrates how access
@@ -29,5 +29,8 @@
 
 int main()
 {
-       menu();
+       PzG::LaczeDoGNUPlota Lacze;
+       Scena Scena1;
+
+       Scena1.Menu(Lacze);
 }

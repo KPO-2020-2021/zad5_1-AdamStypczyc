@@ -18,6 +18,6 @@ constexpr int SZER = 8;
 // #define PLIK_WLASCIWY__DRON1_KORPUS  "datasets/Korpus_wlasciwy.dat"
 // #define PLIK_WLASCIWY__DRON1_ROTOR1  "datasets/Rotor1_wlasciwy.dat"
 // #define PLIK_WLASCIWY__DRON1_ROTOR2  "datasets/Rotor2_wlasciwy.dat"
-// #define PLIK_WLASCIWY__DRON1_ROTOR3  "datasets/Rotor3_wlasciwy.dat"
-// #define PLIK_WLASCIWY__DRON1_ROTOR4  "datasets/Rotor4_wlasciwy.dat"
+#define SIATKA  "datasets/siatka.dat"
+#define SCIEZKA  "datasets/sciezka.dat"
 #define PLIK_TRASY_PRZELOTU "datasets/trasa_przelotu.dat"

@@ -23,7 +23,8 @@ class dron : public Graniastoslup6
     std::vector<std::string> pliki;
     Wektor3D srodek;
     Wektor3D srodek_ciezkosci;
-    Wektor3D sciezka[3];
+    Wektor3D sciezka[4];
+    std::vector<Wektor3D> siatka;
 
 public:
     dron();
@@ -32,22 +33,26 @@ public:
     void przypisz_punkty_sciezki(double kat = 0, double dlugosc_sciezki = 0);
     void stworz_korpus();
     void stworz_rotory();
+    void stworz_siatke();
     Wektor3D pokaz_srodek() { return srodek; }
     void wybierz_drona(int numer) { index = numer; }
     int ktory_dron() { return index; }
     int Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze);
-    int Translacja(PzG::LaczeDoGNUPlota &Lacze, double kat_wzn, double droga);
+    int Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga, double h);
     int Rotacja(PzG::LaczeDoGNUPlota &Lacze);
 
     void ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     void ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     void ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
     void ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
+    void ZapisWspolrzednychDoStrumianiaSiatka(std::ostream &Strm, dron &Siatka);
 
     bool ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     bool ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     bool ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
     bool ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
+    bool ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku, Wektor3D sciezka[4]);
+    bool ZapisWspolrzednychDoPlikuSiatka(const char *NazwaPliku, dron &Siatka);
 };
 dron::dron(Wektor3D przesuniecie_korpusu_wzglXY)
 {
@@ -94,6 +99,52 @@ void dron::stworz_rotory()
     {
         RotorDrona[i] = Graniastoslup6(poczatek, 20, 30);
     }
+}
+void dron::stworz_siatke()
+{
+    Wektor3D poczatek = {0, 0, 0};
+    for (int i = 0; i < 8; ++i)
+    {
+        siatka.push_back(poczatek);
+        for (int j = 0; j < 7; ++j)
+        {
+            poczatek[0] = poczatek[0] + 50;
+            siatka.push_back(poczatek);
+        }
+        poczatek[0] = 0;
+        poczatek[1] = poczatek[1] + 50;
+    }
+}
+void dron::ZapisWspolrzednychDoStrumianiaSiatka(std::ostream &Strm, dron &Siatka)
+{
+    for (int i = 0; i < 64; ++i)
+    {
+        if (i % 8 == 0)
+        {
+            Strm << std::endl;
+        }
+
+        Strm << Siatka.siatka[i];
+    }
+    for (int i = 0; i < 8; ++i)
+    {
+        Strm << Siatka.siatka[i] << Siatka.siatka[i + 8] << Siatka.siatka[i + 16] << Siatka.siatka[i + 24] << Siatka.siatka[i + 32] << Siatka.siatka[i + 40] << Siatka.siatka[i + 48] << Siatka.siatka[i + 56] << std::endl;
+    }
+}
+bool dron::ZapisWspolrzednychDoPlikuSiatka(const char *NazwaPliku, dron &Siatka)
+{
+    std::ofstream StrmPlikowy;
+    StrmPlikowy.open(NazwaPliku);
+    if (!StrmPlikowy.is_open())
+    {
+        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
+                  << ":(  nie powiodla sie." << std::endl;
+        return false;
+    }
+    ZapisWspolrzednychDoStrumianiaSiatka(StrmPlikowy, Siatka);
+
+    StrmPlikowy.close();
+    return !StrmPlikowy.fail();
 }
 void dron::ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
 {
@@ -212,6 +263,9 @@ bool dron::ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Wektor3D &Prz
 }
 int dron::Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze)
 {
+    dron Siatka;
+    stworz_korpus();
+    stworz_rotory();
     wybierz_drona(Ind);
     pliki.push_back("datasets/prostopadloscian0" + std::to_string(index) + ".dat");
     pliki.push_back("datasets/graniastoslup0" + std::to_string(index) + ".dat");
@@ -237,18 +291,38 @@ int dron::Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze)
 
     for (int i = 1; i < 5; ++i)
     {
-        if (ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], wek, RotorDrona[i - 1]))
+        if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], wek, RotorDrona[i - 1]))
             return 1;
     }
+    
+    Siatka.stworz_siatke();
+    if(!Siatka.ZapisWspolrzednychDoPlikuSiatka(SIATKA, Siatka))
+        return 1;
     Lacze.Rysuj();
 
     return 0;
 }
-int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double kat_wzn, double droga)
+bool dron::ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku, Wektor3D sciezka[4])
+{
+    std::ofstream StrmPlikowy;
+
+    StrmPlikowy.open(NazwaPliku);
+    if (!StrmPlikowy.is_open())
+    {
+        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
+                  << ":(  nie powiodla sie." << std::endl;
+        return false;
+    }
+    StrmPlikowy << sciezka[0] << sciezka[1] << sciezka[2] << sciezka[3] << std::endl; 
+
+    StrmPlikowy.close();
+
+    return !StrmPlikowy.fail();
+}
+int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga, double h)
 {
     double x, y, z;
     double obrot_caly;
-    double kat_wznoszenia;
     double rad_tmp;
 
     Wektor3D wek = {0, 0, 0};
@@ -261,11 +335,10 @@ int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double kat_wzn, double droga)
     rad_tmp = StopienNaRadianZ(-3);
     Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot2[1]);
 
-    kat_wznoszenia = kat_wzn * M_PI / 180;
     obrot_caly = suma_kat_orientacji * M_PI / 180;
-    x = droga * sin(fabs(obrot_caly)) * cos(fabs(kat_wznoszenia));
-    y = droga * cos(fabs(obrot_caly)) * cos(fabs(kat_wznoszenia));
-    z = droga * sin(fabs(kat_wznoszenia));
+    x = droga * sin(fabs(obrot_caly));
+    y = droga * cos(fabs(obrot_caly));
+    z = h;
 
     for (int i = 0; i < 4; ++i)
     {
@@ -274,29 +347,17 @@ int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double kat_wzn, double droga)
         wektory[i][2] = RotorDrona[i][13][2] + 5;
     }
 
-    if (kat_wznoszenia >= 0 && obrot_caly >= 0)
+    if (obrot_caly >= 0)
     {
         wek[0] = -x;
         wek[1] = y;
         wek[2] = z;
     }
-    else if (kat_wznoszenia >= 0 && obrot_caly < 0)
+    else if (obrot_caly < 0)
     {
         wek[0] = x;
         wek[1] = y;
         wek[2] = z;
-    }
-    else if (kat_wznoszenia < 0 && obrot_caly >= 0)
-    {
-        wek[0] = -x;
-        wek[1] = y;
-        wek[2] = -z;
-    }
-    else if (kat_wznoszenia < 0 && obrot_caly < 0)
-    {
-        wek[0] = x;
-        wek[1] = y;
-        wek[2] = -z;
     }
 
     wek2[0] = wek[0] / 100;
@@ -325,6 +386,11 @@ int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double kat_wzn, double droga)
         wektory[i][1] = RotorDrona[i][13][1];
         wektory[i][2] = RotorDrona[i][13][2] + 5;
     }
+
+    przypisz_punkty_sciezki(obrot_caly, droga);
+    if (!ZapisWspolrzednychDoPlikuSciezka(SCIEZKA, sciezka))
+            return 1;
+
     Lacze.Rysuj();
     usleep(27000);
     return 0;
