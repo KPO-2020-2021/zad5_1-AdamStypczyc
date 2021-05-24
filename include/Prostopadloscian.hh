@@ -16,7 +16,10 @@ public:
     void wyswietl_wspolrzedne();
 
 };
-
+Prostopadloscian::Prostopadloscian()
+{
+    
+}
 /*!
  * \brief Konstruktor parametryczny klasy Prostopadloscian.
  * Tworzy prostopadłościan i przypisuje wartości (x,y,z) do współrzędnych.

@@ -136,13 +136,6 @@ Macierz<Templ_Typ, Templ_Rozmiar> Macierz<Templ_Typ, Templ_Rozmiar>::operator*(M
     return result;
 }
 template <typename Templ_Typ, unsigned int Templ_Rozmiar>
-/*!
- * \brief Przeciążenie operatora mnożenia Macierz*Wektor3D.
- * Przeciążenie operatora mnożenia, aby umożliwić mnożenie macierzy i wektora3D.
- * \param tmp wektor3D mnożony przez macierz.
- * \param result wynikowy wektor3D 
- * \return Wynik mnożenia w postaci wektora3D result.
- */
 Wektor3D Macierz<Templ_Typ, Templ_Rozmiar>::operator*(Wektor3D tmp)
 {
     assert(Templ_Rozmiar==3);

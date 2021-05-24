@@ -11,10 +11,10 @@
 class Graniastoslup
 {
 protected:
-    // std::vector<Wektor3D> wspol;
+    //std::vector<Wektor3D> wspol;
 
 public:
-std::vector<Wektor3D> wspol;
+    std::vector<Wektor3D> wspol;
     Graniastoslup();
     ~Graniastoslup();
     Wektor3D &operator[](int i);

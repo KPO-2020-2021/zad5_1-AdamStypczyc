@@ -2,90 +2,72 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
-#include "Graniastoslup6.hh"
-#include "Prostopadloscian.hh"
-#include "ObiektSceny.hh"
 #include <unistd.h>
 #include <cmath>
 #include <ctime>
 #include <assert.h>
 #include <memory>
+#include "Prostopadloscian.hh"
+#include "Graniastoslup6.hh"
+#include "lacze_do_gnuplota.hh"
 
-class dron : public Graniastoslup6
+class dron : public Graniastoslup6, public Prostopadloscian
 {
+private:
     Prostopadloscian KorpusDrona;
     Graniastoslup6 RotorDrona[4];
-    Macierz3x3 MacObrot;
-    Macierz3x3 MacObrot2[2];
+    Macierz3x3 ObrotDr;
+    Macierz3x3 ObrotRo[2];
     int index;
     double kat_orientacji;
     double suma_kat_orientacji;
-    std::vector<std::string> pliki;
     Wektor3D srodek;
-    Wektor3D srodek_ciezkosci;
     Wektor3D sciezka[4];
-    std::vector<Wektor3D> siatka;
 
 public:
     dron();
     dron(Wektor3D przesuniecie_korpusu_wzglXY);
     void przypisz_kat_orientacji(double kat);
-    void przypisz_punkty_sciezki(double kat = 0, double dlugosc_sciezki = 0);
     void stworz_korpus();
     void stworz_rotory();
-    void stworz_siatke();
+    void zwroc_pkty_sciezki(Wektor3D &a, Wektor3D &b, Wektor3D &c, Wektor3D &d);
     Wektor3D pokaz_srodek() { return srodek; }
     void wybierz_drona(int numer) { index = numer; }
     int ktory_dron() { return index; }
+
     int Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze);
-    int Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga, double h);
+    int Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga);
     int Rotacja(PzG::LaczeDoGNUPlota &Lacze);
 
     void ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     void ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     void ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
     void ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
-    void ZapisWspolrzednychDoStrumianiaSiatka(std::ostream &Strm, dron &Siatka);
 
     bool ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     bool ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Wektor3D &Przesuniecie, Prostopadloscian &Korpus);
     bool ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
     bool ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor);
-    bool ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku, Wektor3D sciezka[4]);
-    bool ZapisWspolrzednychDoPlikuSiatka(const char *NazwaPliku, dron &Siatka);
+    bool ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku);
 };
-dron::dron(Wektor3D przesuniecie_korpusu_wzglXY)
+
+dron::dron()
 {
     this->kat_orientacji = 0;
     this->suma_kat_orientacji = 0;
+    srodek = {0, 0, 0};
+}
 
+dron::dron(Wektor3D przesuniecie_korpusu_wzglXY)
+{
     srodek[0] = 100 + przesuniecie_korpusu_wzglXY[0];
     srodek[1] = 100 + przesuniecie_korpusu_wzglXY[1];
     srodek[2] = 0 + przesuniecie_korpusu_wzglXY[2];
 }
-
 void dron::przypisz_kat_orientacji(double kat)
 {
-    kat_orientacji = kat;
-    suma_kat_orientacji = suma_kat_orientacji + kat_orientacji;
-}
-void dron::przypisz_punkty_sciezki(double kat, double dlugosc_sciezki)
-{
-    double _x, _y;
-    double kat_radian = kat * M_PI / 180;
-    for (int i = 0; i < 4; ++i)
-    {
-        sciezka[i] = srodek;
-    }
-    sciezka[1][2] = 490;
-    sciezka[2][2] = 490;
-    sciezka[2][0] += dlugosc_sciezki;
-    _x = sciezka[2][0];
-    _y = sciezka[2][1];
-    sciezka[2][0] = _x * cos(kat_radian) - _y * sin(kat_radian);
-    sciezka[2][1] = _x * sin(kat_radian) + _y * cos(kat_radian);
-    sciezka[3] = sciezka[2];
-    sciezka[3][2] = sciezka[3][2] - 490;
+    this->kat_orientacji = kat;
+    this->suma_kat_orientacji += kat_orientacji;
 }
 void dron::stworz_korpus()
 {
@@ -100,51 +82,12 @@ void dron::stworz_rotory()
         RotorDrona[i] = Graniastoslup6(poczatek, 20, 30);
     }
 }
-void dron::stworz_siatke()
+void dron::zwroc_pkty_sciezki(Wektor3D &a, Wektor3D &b, Wektor3D &c, Wektor3D &d)
 {
-    Wektor3D poczatek = {0, 0, 0};
-    for (int i = 0; i < 8; ++i)
-    {
-        siatka.push_back(poczatek);
-        for (int j = 0; j < 7; ++j)
-        {
-            poczatek[0] = poczatek[0] + 50;
-            siatka.push_back(poczatek);
-        }
-        poczatek[0] = 0;
-        poczatek[1] = poczatek[1] + 50;
-    }
-}
-void dron::ZapisWspolrzednychDoStrumianiaSiatka(std::ostream &Strm, dron &Siatka)
-{
-    for (int i = 0; i < 64; ++i)
-    {
-        if (i % 8 == 0)
-        {
-            Strm << std::endl;
-        }
-
-        Strm << Siatka.siatka[i];
-    }
-    for (int i = 0; i < 8; ++i)
-    {
-        Strm << Siatka.siatka[i] << Siatka.siatka[i + 8] << Siatka.siatka[i + 16] << Siatka.siatka[i + 24] << Siatka.siatka[i + 32] << Siatka.siatka[i + 40] << Siatka.siatka[i + 48] << Siatka.siatka[i + 56] << std::endl;
-    }
-}
-bool dron::ZapisWspolrzednychDoPlikuSiatka(const char *NazwaPliku, dron &Siatka)
-{
-    std::ofstream StrmPlikowy;
-    StrmPlikowy.open(NazwaPliku);
-    if (!StrmPlikowy.is_open())
-    {
-        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
-                  << ":(  nie powiodla sie." << std::endl;
-        return false;
-    }
-    ZapisWspolrzednychDoStrumianiaSiatka(StrmPlikowy, Siatka);
-
-    StrmPlikowy.close();
-    return !StrmPlikowy.fail();
+    a = sciezka[0];
+    b = sciezka[1];
+    c = sciezka[2];
+    d = sciezka[3];
 }
 void dron::ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
 {
@@ -162,6 +105,21 @@ void dron::ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, M
     }
     Strm << Korpus << std::endl;
 }
+bool dron::ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
+{
+    std::ofstream StrmPlikowy;
+    StrmPlikowy.open(NazwaPliku);
+    if (!StrmPlikowy.is_open())
+    {
+        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
+                  << ":(  nie powiodla sie." << std::endl;
+        return false;
+    }
+    ZapisWspolrzednychDoStrumieniaProstopadloscianu(StrmPlikowy, M, Przesuniecie, Korpus);
+
+    StrmPlikowy.close();
+    return !StrmPlikowy.fail();
+}
 void dron::ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
 {
     for (int i = 0; i < 8; ++i)
@@ -169,6 +127,21 @@ void dron::ZapisWspolrzednychDoStrumieniaProstopadloscianu(std::ostream &Strm, W
         Korpus[i] = Korpus[i] + Przesuniecie;
     }
     Strm << Korpus << std::endl;
+}
+bool dron::ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
+{
+    std::ofstream StrmPlikowy;
+    StrmPlikowy.open(NazwaPliku);
+    if (!StrmPlikowy.is_open())
+    {
+        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
+                  << ":(  nie powiodla sie." << std::endl;
+        return false;
+    }
+    ZapisWspolrzednychDoStrumieniaProstopadloscianu(StrmPlikowy, Przesuniecie, Korpus);
+
+    StrmPlikowy.close();
+    return !StrmPlikowy.fail();
 }
 void dron::ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor)
 {
@@ -186,51 +159,9 @@ void dron::ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Macierz3x3 &
     }
     Strm << Rotor << std::endl;
 }
-void dron::ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor)
-{
-    for (int i = 0; i < 8; ++i)
-    {
-        Rotor[i] = Rotor[i] + Przesuniecie;
-    }
-    Strm << Rotor << std::endl;
-}
-
-bool dron::ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
-{
-    std::ofstream StrmPlikowy;
-    StrmPlikowy.open(NazwaPliku);
-    if (!StrmPlikowy.is_open())
-    {
-        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
-                  << ":(  nie powiodla sie." << std::endl;
-        return false;
-    }
-    ZapisWspolrzednychDoStrumieniaProstopadloscianu(StrmPlikowy, M, Przesuniecie, Korpus);
-
-    StrmPlikowy.close();
-    return !StrmPlikowy.fail();
-}
-bool dron::ZapisWspolrzednychDoPlikuProstopadloscianu(const char *NazwaPliku, Wektor3D &Przesuniecie, Prostopadloscian &Korpus)
-{
-    std::ofstream StrmPlikowy;
-
-    StrmPlikowy.open(NazwaPliku);
-    if (!StrmPlikowy.is_open())
-    {
-        std::cerr << ":(  Operacja otwarcia do zapisu \"" << NazwaPliku << "\"" << std::endl
-                  << ":(  nie powiodla sie." << std::endl;
-        return false;
-    }
-    ZapisWspolrzednychDoStrumieniaProstopadloscianu(StrmPlikowy, Przesuniecie, Korpus);
-
-    StrmPlikowy.close();
-
-    return !StrmPlikowy.fail();
-}
 bool dron::ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Macierz3x3 &M, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor)
 {
     std::ofstream StrmPlikowy;
-
     StrmPlikowy.open(NazwaPliku);
     if (!StrmPlikowy.is_open())
     {
@@ -241,13 +172,19 @@ bool dron::ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Macierz3x3 &M
     ZapisWspolrzednychDoStrumieniaRotora(StrmPlikowy, M, Przesuniecie, Rotor);
 
     StrmPlikowy.close();
-
     return !StrmPlikowy.fail();
+}
+void dron::ZapisWspolrzednychDoStrumieniaRotora(std::ostream &Strm, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        Rotor[i] = Rotor[i] + Przesuniecie;
+    }
+    Strm << Rotor << std::endl;
 }
 bool dron::ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Wektor3D &Przesuniecie, Graniastoslup6 &Rotor)
 {
     std::ofstream StrmPlikowy;
-
     StrmPlikowy.open(NazwaPliku);
     if (!StrmPlikowy.is_open())
     {
@@ -258,54 +195,13 @@ bool dron::ZapisWspolrzednychDoPlikuRotora(const char *NazwaPliku, Wektor3D &Prz
     ZapisWspolrzednychDoStrumieniaRotora(StrmPlikowy, Przesuniecie, Rotor);
 
     StrmPlikowy.close();
-
     return !StrmPlikowy.fail();
 }
-int dron::Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze)
+bool dron::ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku)
 {
-    dron Siatka;
-    stworz_korpus();
-    stworz_rotory();
-    wybierz_drona(Ind);
-    pliki.push_back("datasets/prostopadloscian0" + std::to_string(index) + ".dat");
-    pliki.push_back("datasets/graniastoslup0" + std::to_string(index) + ".dat");
-    pliki.push_back("datasets/graniastoslup1" + std::to_string(index) + ".dat");
-    pliki.push_back("datasets/graniastoslup2" + std::to_string(index) + ".dat");
-    pliki.push_back("datasets/graniastoslup3" + std::to_string(index) + ".dat");
-
-    for (int i = 0; i < (int)pliki.size(); ++i)
-    {
-        Lacze.DodajNazwePliku(&pliki[i][0], PzG::RR_Ciagly, 2);
-    }
-
-    Wektor3D wek = {0, 0, 0};
-    int j = 0;
-    for (int i = 0; i < 4; ++i)
-    {
-        RotorDrona[i] = Graniastoslup6(KorpusDrona[j], 10, 15);
-        j = j + 2;
-    }
-
-    if (!ZapisWspolrzednychDoPlikuProstopadloscianu(&pliki[0][0], wek, KorpusDrona))
-        return 1;
-
-    for (int i = 1; i < 5; ++i)
-    {
-        if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], wek, RotorDrona[i - 1]))
-            return 1;
-    }
-    
-    Siatka.stworz_siatke();
-    if(!Siatka.ZapisWspolrzednychDoPlikuSiatka(SIATKA, Siatka))
-        return 1;
-    Lacze.Rysuj();
-
-    return 0;
-}
-bool dron::ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku, Wektor3D sciezka[4])
-{
+    Wektor3D szlak[4];
+    zwroc_pkty_sciezki(szlak[0], szlak[1], szlak[2], szlak[3]);
     std::ofstream StrmPlikowy;
-
     StrmPlikowy.open(NazwaPliku);
     if (!StrmPlikowy.is_open())
     {
@@ -313,136 +209,628 @@ bool dron::ZapisWspolrzednychDoPlikuSciezka(const char *NazwaPliku, Wektor3D sci
                   << ":(  nie powiodla sie." << std::endl;
         return false;
     }
-    StrmPlikowy << sciezka[0] << sciezka[1] << sciezka[2] << sciezka[3] << std::endl; 
+    StrmPlikowy << szlak[0] << std::endl
+                << szlak[1] << std::endl
+                << szlak[2] << std::endl
+                << szlak[3] << std::endl
+                << std::endl;
 
     StrmPlikowy.close();
-
     return !StrmPlikowy.fail();
 }
-int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga, double h)
+int dron::Inicjalizacja(int Ind, PzG::LaczeDoGNUPlota &Lacze)
 {
-    double x, y, z;
-    double obrot_caly;
+    stworz_korpus();
+    wybierz_drona(Ind);
+
+    if (index == 0)
+    {
+        Lacze.DodajNazwePliku(KORPUS00, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR00, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR10, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR20, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR30, PzG::RR_Ciagly, 2);
+    }
+    else if (index == 1)
+    {
+        Lacze.DodajNazwePliku(KORPUS01, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR01, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR11, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR21, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR31, PzG::RR_Ciagly, 2);
+    }
+    else if (index == 2)
+    {
+        Lacze.DodajNazwePliku(KORPUS02, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR02, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR12, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR22, PzG::RR_Ciagly, 2);
+        Lacze.DodajNazwePliku(ROTOR32, PzG::RR_Ciagly, 2);
+    }
+    else
+    {
+        std::cerr << "Zły numer drona!!!" << std::endl;
+    }
+    Wektor3D wek = {0, 0, 0};
+    int j = 4;
+    for (int i = 0; i < 4; ++i)
+    {
+        RotorDrona[i] = Graniastoslup6(KorpusDrona[j], 10, 15);
+        j += 1;
+    }
+    if (index == 0)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, wek, KorpusDrona))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, wek, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, wek, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, wek, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, wek, RotorDrona[3]))
+            return 1;
+    }
+    else if (index == 1)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, wek, KorpusDrona))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, wek, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, wek, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, wek, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, wek, RotorDrona[3]))
+            return 1;
+    }
+    else if (index == 2)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, wek, KorpusDrona))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, wek, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, wek, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, wek, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, wek, RotorDrona[3]))
+            return 1;
+    }
+    Lacze.Rysuj();
+
+    return 0;
+}
+int dron::Translacja(PzG::LaczeDoGNUPlota &Lacze, double droga)
+{
+    double x, y, z[2];
+    // double obrot_caly_rad;
     double rad_tmp;
 
-    Wektor3D wek = {0, 0, 0};
+    Wektor3D wek1, wek2, wek3;
+    Wektor3D TabWek[4];
 
-    Wektor3D wek2;
-    Wektor3D wektory[4];
+    rad_tmp = StopienNaRadianZ(4);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotRo[0]);
+    rad_tmp = StopienNaRadianZ(-4);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotRo[1]);
 
-    rad_tmp = StopienNaRadianZ(3);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot2[0]);
-    rad_tmp = StopienNaRadianZ(-3);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot2[1]);
-
-    obrot_caly = suma_kat_orientacji * M_PI / 180;
-    x = droga * sin(fabs(obrot_caly));
-    y = droga * cos(fabs(obrot_caly));
-    z = h;
+    //obrot_caly_rad = suma_kat_orientacji * M_PI / 180;
+    x = droga * cos(rad_tmp);
+    y = droga * sin(rad_tmp);
+    z[0] = 490;
+    z[1] = -490;
 
     for (int i = 0; i < 4; ++i)
     {
-        wektory[i][0] = RotorDrona[i][13][0]; // obliczanie srodka ciezkosci kazdego rotora Drona
-        wektory[i][1] = RotorDrona[i][13][1];
-        wektory[i][2] = RotorDrona[i][13][2] + 5;
+        //obliczanie środka ciężkości rotora
+        TabWek[i][0] = RotorDrona[i][13][0];
+        TabWek[i][1] = RotorDrona[i][13][1];
+        TabWek[i][2] = RotorDrona[i][13][2] + 5;
     }
-
-    if (obrot_caly >= 0)
+    if (kat_orientacji >= 0)
     {
-        wek[0] = -x;
-        wek[1] = y;
-        wek[2] = z;
+        wek1 = {0, 0, z[0]};
+        wek2 = {x, y, 0};
+        wek3 = {0, 0, z[1]};
     }
-    else if (obrot_caly < 0)
+    else if (kat_orientacji < 0)
     {
-        wek[0] = x;
-        wek[1] = y;
-        wek[2] = z;
+        wek1 = {0, 0, z[0]};
+        wek2 = {x, -y, 0};
+        wek3 = {0, 0, z[1]};
     }
+    sciezka[0] = srodek;
+    sciezka[1] = sciezka[0] + wek1;
+    sciezka[2] = sciezka[1] + wek2;
+    sciezka[3] = sciezka[2] + wek3;
 
-    wek2[0] = wek[0] / 100;
-    wek2[1] = wek[1] / 100;
-    wek2[2] = wek[2] / 100;
-
-    srodek_ciezkosci = srodek_ciezkosci + wek2;
     srodek = srodek + wek2;
 
-    if (!ZapisWspolrzednychDoPlikuProstopadloscianu(&pliki[0][0], wek2, KorpusDrona))
+    if (!ZapisWspolrzednychDoPlikuSciezka(SCIEZKA))
         return 1;
-
-    for (int i = 1; i < 5; ++i)
+    Lacze.Rysuj();
+    std::cout << "Wznoszenie ..." << std::endl;
+    if (index == 0)
     {
-        wektory[i - 1][0] = wektory[i - 1][0] + wek2[0];
-        wektory[i - 1][1] = wektory[i - 1][1] + wek2[1];
-        wektory[i - 1][2] = wektory[i - 1][2] + wek2[2];
-
-        if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], wek2, RotorDrona[i - 1]))
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, wek1, KorpusDrona))
             return 1;
-
-        if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], MacObrot2[(i - 1) % 2], wek2, RotorDrona[i - 1]))
+    }
+    else if (index == 1)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, wek1, KorpusDrona))
             return 1;
-
-        wektory[i][0] = RotorDrona[i][13][0]; // obliczanie srodka ciezkosci kazdego rotora Drona
-        wektory[i][1] = RotorDrona[i][13][1];
-        wektory[i][2] = RotorDrona[i][13][2] + 5;
+    }
+    else if (index == 2)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, wek1, KorpusDrona))
+            return 1;
     }
 
-    przypisz_punkty_sciezki(obrot_caly, droga);
-    if (!ZapisWspolrzednychDoPlikuSciezka(SCIEZKA, sciezka))
+    if (index == 0)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek1;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, wek1, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, wek1, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, wek1, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, wek1, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, ObrotRo[1], TabWek[3], RotorDrona[3]))
             return 1;
 
-    Lacze.Rysuj();
-    usleep(27000);
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 1)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek1;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, wek1, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, wek1, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, wek1, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, wek1, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 2)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek1;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, wek1, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, wek1, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, wek1, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, wek1, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+    usleep(30000);
+
+    std::cout << "Lot..." << std::endl;
+    if (index == 0)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, wek2, KorpusDrona))
+            return 1;
+    }
+    else if (index == 1)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, wek2, KorpusDrona))
+            return 1;
+    }
+    else if (index == 2)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, wek2, KorpusDrona))
+            return 1;
+    }
+
+    if (index == 0)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek2;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, wek2, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, wek2, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, wek2, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, wek2, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 1)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek2;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, wek2, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, wek2, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, wek2, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, wek2, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 2)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek2;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, wek2, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, wek2, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, wek2, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, wek2, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+    usleep(30000);
+
+    std::cout << "Lądowanie..." << std::endl;
+    if (index == 0)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, wek3, KorpusDrona))
+            return 1;
+    }
+    else if (index == 1)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, wek3, KorpusDrona))
+            return 1;
+    }
+    else if (index == 2)
+    {
+        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, wek3, KorpusDrona))
+            return 1;
+    }
+
+    if (index == 0)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek3;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, wek3, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, wek3, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, wek3, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, wek3, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 1)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek3;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, wek3, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, wek3, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, wek3, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, wek3, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    else if (index == 2)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            TabWek[i] = TabWek[i] + wek3;
+        }
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, wek3, RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, ObrotRo[0], TabWek[0], RotorDrona[0]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, wek3, RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, ObrotRo[1], TabWek[1], RotorDrona[1]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, wek3, RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, ObrotRo[0], TabWek[2], RotorDrona[2]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, wek3, RotorDrona[3]))
+            return 1;
+        if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, ObrotRo[1], TabWek[3], RotorDrona[3]))
+            return 1;
+
+        for (int i = 0; i < 4; ++i)
+        {
+            //obliczanie środka ciężkości rotora
+            TabWek[i][0] = RotorDrona[i][13][0];
+            TabWek[i][1] = RotorDrona[i][13][1];
+            TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        }
+    }
+    Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+    usleep(30000);
     return 0;
 }
 int dron::Rotacja(PzG::LaczeDoGNUPlota &Lacze)
 {
     double rad_tmp;
-
-    rad_tmp = StopienNaRadianZ(3);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot2[0]);
-    rad_tmp = StopienNaRadianZ(-3);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot2[1]);
-
-    Macierz3x3 MacPrz[2];
+    rad_tmp = StopienNaRadianZ(4);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotRo[0]);
+    rad_tmp = StopienNaRadianZ(-4);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotRo[1]);
+    
+    Macierz3x3 M_Przod[2], M_Tyl[2];
+    
     rad_tmp = StopienNaRadianZ(1);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacPrz[0]);
-    rad_tmp = StopienNaRadianZ(6);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacPrz[1]);
-
-    Macierz3x3 MacTyl[2];
+    Oblicz_Macierz_ObrotuZ(rad_tmp, M_Przod[0]);
+    rad_tmp = StopienNaRadianZ(7);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, M_Przod[1]);
+    
     rad_tmp = StopienNaRadianZ(-1);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacTyl[0]);
-    rad_tmp = StopienNaRadianZ(-6);
-    Oblicz_Macierz_ObrotuZ(rad_tmp, MacTyl[1]);
-
-    Wektor3D wektory[4];
+    Oblicz_Macierz_ObrotuZ(rad_tmp, M_Tyl[0]);
+    rad_tmp = StopienNaRadianZ(-7);
+    Oblicz_Macierz_ObrotuZ(rad_tmp, M_Tyl[1]);
+    
+    Wektor3D TabWek[4];
 
     for (int i = 0; i < 4; ++i)
     {
-        wektory[i][0] = RotorDrona[i][13][0]; // obliczanie srodka ciezkosci kazdego rotora Drona
-        wektory[i][1] = RotorDrona[i][13][1];
-        wektory[i][2] = RotorDrona[i][13][2] + 5;
+        /******************
+         * 
+         * SEGMENT
+         */
+        
+        //obliczanie środka ciężkości rotora
+        TabWek[i][0] = RotorDrona[i][13][0];
+        TabWek[i][1] = RotorDrona[i][13][1];
+        TabWek[i][2] = RotorDrona[i][13][2] + 5;
+        
+        
     }
-
-    if (kat_orientacji > 0)
+    
+    if (kat_orientacji >= 0)
     {
         rad_tmp = StopienNaRadianZ(1);
-        Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot);
+        Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotDr);
 
-        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(&pliki[0][0], MacObrot, srodek, KorpusDrona))
-            return 1; //obrót wokół własnej osi
-
-        for (int i = 1; i < 5; ++i)
+        if (index == 0)
         {
-            if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], MacPrz[(i - 1) % 2], wektory[i - 1], RotorDrona[i - 1]))
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, ObrotDr, srodek, KorpusDrona))
                 return 1;
-            if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], MacObrot, srodek, RotorDrona[i - 1]))
+        }
+        else if (index == 1)
+        {
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, ObrotDr, srodek, KorpusDrona))
+                return 1;
+        }
+        else if (index == 2)
+        {
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, ObrotDr, srodek, KorpusDrona))
+                return 1;
+        }
+
+        if (index == 0)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, M_Przod[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, M_Przod[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, M_Przod[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, M_Przod[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, ObrotDr, srodek, RotorDrona[3]))
                 return 1;
 
-            wektory[i][0] = RotorDrona[i][13][0]; // obliczanie srodka ciezkosci kazdego rotora Drona
-            wektory[i][1] = RotorDrona[i][13][1];
-            wektory[i][2] = RotorDrona[i][13][2] + 5;
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
+        }
+        else if (index == 1)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, M_Przod[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, M_Przod[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, M_Przod[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, M_Przod[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, ObrotDr, srodek, RotorDrona[3]))
+                return 1;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
+        }
+        else if (index == 2)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, M_Przod[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, M_Przod[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, M_Przod[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, M_Przod[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, ObrotDr, srodek, RotorDrona[3]))
+                return 1;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
         }
         Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
         usleep(30000);
@@ -450,24 +838,110 @@ int dron::Rotacja(PzG::LaczeDoGNUPlota &Lacze)
     else
     {
         rad_tmp = StopienNaRadianZ(-1);
-        Oblicz_Macierz_ObrotuZ(rad_tmp, MacObrot);
-        if (!ZapisWspolrzednychDoPlikuProstopadloscianu(&pliki[0][0], MacObrot, srodek, KorpusDrona))
-            return 1; //obrót wokół własnej osi
+        Oblicz_Macierz_ObrotuZ(rad_tmp, ObrotDr);
 
-        for (int i = 1; i < 5; ++i)
+        if (index == 0)
         {
-            if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], MacTyl[(i - 1) % 2], wektory[i - 1], RotorDrona[i - 1]))
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS00, ObrotDr, srodek, KorpusDrona))
                 return 1;
-            if (!ZapisWspolrzednychDoPlikuRotora(&pliki[i][0], MacObrot, srodek, RotorDrona[i - 1]))
+        }
+        else if (index == 1)
+        {
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS01, ObrotDr, srodek, KorpusDrona))
+                return 1;
+        }
+        else if (index == 2)
+        {
+            if (!ZapisWspolrzednychDoPlikuProstopadloscianu(KORPUS02, ObrotDr, srodek, KorpusDrona))
+                return 1;
+        }
+
+        if (index == 0)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, M_Tyl[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR00, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, M_Tyl[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR10, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, M_Tyl[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR20, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, M_Tyl[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR30, ObrotDr, srodek, RotorDrona[3]))
                 return 1;
 
-            wektory[i][0] = RotorDrona[i][13][0]; // obliczanie srodka ciezkosci kazdego rotora Drona
-            wektory[i][1] = RotorDrona[i][13][1];
-            wektory[i][2] = RotorDrona[i][13][2] + 5;
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
+        }
+        else if (index == 1)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, M_Tyl[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR01, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, M_Tyl[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR11, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, M_Tyl[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR21, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, M_Tyl[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR31, ObrotDr, srodek, RotorDrona[3]))
+                return 1;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
+        }
+        else if (index == 2)
+        {
+
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, M_Tyl[0], TabWek[0], RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR02, ObrotDr, srodek, RotorDrona[0]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, M_Tyl[1], TabWek[1], RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR12, ObrotDr, srodek, RotorDrona[1]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, M_Tyl[0], TabWek[2], RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR22, ObrotDr, srodek, RotorDrona[2]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, M_Tyl[1], TabWek[3], RotorDrona[3]))
+                return 1;
+            if (!ZapisWspolrzednychDoPlikuRotora(ROTOR32, ObrotDr, srodek, RotorDrona[3]))
+                return 1;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                //obliczanie środka ciężkości rotora
+                TabWek[i][0] = RotorDrona[i][13][0];
+                TabWek[i][1] = RotorDrona[i][13][1];
+                TabWek[i][2] = RotorDrona[i][13][2] + 5;
+            }
         }
         Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
         usleep(30000);
     }
-
     return 0;
 }

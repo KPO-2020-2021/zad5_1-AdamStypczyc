@@ -12,6 +12,10 @@ public:
     Graniastoslup6();
     Graniastoslup6(Wektor3D poczatek, double h, double r);
 };
+Graniastoslup6::Graniastoslup6()
+{
+
+}
 /*!
  * \brief Konstruktor parametryczny klasy Graniastoslup6.
  * Tworzy prostopadłościan i przypisuje wartości (x,y,z) do współrzędnych.

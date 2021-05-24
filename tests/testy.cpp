@@ -1,9 +1,7 @@
 #include "../tests/doctest/doctest.h"
 #include "lacze_do_gnuplota.hh"
 #include "Prostopadloscian.hh"
-#include "Macierz4x4.hh"
 #include "Graniastoslup6.hh"
-#include "obsluga.hh"
 
 // TEST_CASE("rysowanie sześciokąta 1")
 // {

@@ -32,5 +32,5 @@ int main()
        PzG::LaczeDoGNUPlota Lacze;
        Scena Scena1;
 
-       Scena1.Menu(Lacze);
+       Scena1.menu(Lacze);
 }
