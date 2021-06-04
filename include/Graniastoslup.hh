@@ -36,7 +36,7 @@ public:
  */
 Graniastoslup::~Graniastoslup()
 {
-    /*delete*/free (wymiar);
+    free(wymiar);
 }
 /*!
  * \brief Przeciążenie operatora [] set.

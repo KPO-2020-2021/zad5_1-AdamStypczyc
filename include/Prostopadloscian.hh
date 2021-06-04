@@ -14,7 +14,7 @@ public:
 };
 Prostopadloscian::~Prostopadloscian()
 {
-    /*delete*/free (wymiar);
+    free(wymiar);
 }
 Prostopadloscian::Prostopadloscian(Wektor3D sro, double h, double w, double d, std::string nazwa)
 {

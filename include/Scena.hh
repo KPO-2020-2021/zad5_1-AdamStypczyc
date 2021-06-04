@@ -97,9 +97,8 @@ Scena::Scena()
 }
 Scena::~Scena()
 {
-    //delete siatka;
-    delete tab_dronow[0];
-    delete tab_dronow[1];
+    free(tab_dronow[0]);
+    free(tab_dronow[1]);
 }
 bool Scena::dzialanie()
 {
@@ -148,12 +147,17 @@ bool Scena::dzialanie()
                 }
             }
         }
-        else if(wybor == 'k')
+        else if (wybor == 'k')
         {
+            std::cout << "--------------------------------------------------------" << std::endl;
+            std::cout << "             Ilość stworzonych wektorów: " << Wektor3D::ilosc_stworzonych << std::endl;
+            std::cout << "  Ilość aktualnie istniejących wektorów: " << Wektor3D::ilosc_tymczasowych << std::endl;
+            std::cout << "--------------------------------------------------------" << std::endl;
+
             std::cout << "Do zobaczenia!!!" << std::endl;
             break;
         }
-        else if(wybor == 'o' || wybor == 't' || wybor == 'r')
+        else if (wybor == 'o' || wybor == 't' || wybor == 'r')
         {
             tab_dronow[index]->akcja(wybor);
         }

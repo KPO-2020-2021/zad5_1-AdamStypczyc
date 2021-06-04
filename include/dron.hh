@@ -83,11 +83,7 @@ void dron::obrot(double kat_obrotu)
     this->kat = this->kat + kat_obrotu;
     double radian;
     radian = StopienNaRadianZ(this->kat);
-    // double tab[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    // Macierz3x3 tmp = Macierz3x3(tab);
-    Macierz3x3 tmp1;
-    Oblicz_Macierz_ObrotuZ(radian, tmp1);
-    obr = /*tmp */ tmp1;
+    Oblicz_Macierz_ObrotuZ(radian, obr);
     korpus.rotacja(obr);
     korpus.translacja(this->droga);
 }
@@ -146,6 +142,8 @@ void dron::akcja(char wybor)
             {
                 std::cout << "Nieprzypisano kąta :(" << std::endl;
                 std::cout << "Podaj kąt jeszcze raz :(" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(1024, '\n');
             }
         }
         if (kat < 0)
@@ -161,7 +159,7 @@ void dron::akcja(char wybor)
                 obrot_rotorow();
                 zapisz();
                 Lacze.Rysuj();
-                usleep(25000);
+                usleep(15000);
             }
         }
         else
@@ -177,7 +175,7 @@ void dron::akcja(char wybor)
                 obrot_rotorow();
                 zapisz();
                 Lacze.Rysuj();
-                usleep(25000);
+                usleep(15000);
             }
         }
         break;
@@ -195,6 +193,8 @@ void dron::akcja(char wybor)
             {
                 std::cout << "Nieprzypisano długości drogi :(" << std::endl;
                 std::cout << "Podaj długość drogi jeszcze raz :(" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(1024, '\n');
             }
         }
         std::cout << "Podaj kąt o jaki ma się obrócić dron" << std::endl;
@@ -210,6 +210,8 @@ void dron::akcja(char wybor)
             {
                 std::cout << "Nieprzypisano kąta :(" << std::endl;
                 std::cout << "Podaj kąt jeszcze raz :(" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(1024, '\n');
             }
         }
         if (kat < 0)
@@ -225,7 +227,7 @@ void dron::akcja(char wybor)
                 obrot_rotorow();
                 zapisz();
                 Lacze.Rysuj();
-                usleep(25000);
+                usleep(15000);
             }
         }
         else
@@ -241,7 +243,7 @@ void dron::akcja(char wybor)
                 obrot_rotorow();
                 zapisz();
                 Lacze.Rysuj();
-                usleep(25000);
+                usleep(15000);
             }
         }
         przypisz_droge(droga);
@@ -258,7 +260,7 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
         std::cout << "Lot..." << std::endl;
         for (int i = 0; i < droga; ++i)
@@ -272,7 +274,7 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
         std::cout << "Lądowanie..." << std::endl;
         for (int i = 0; i < 400; ++i)
@@ -286,10 +288,13 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
+        Lacze.UsunOstatniaNazwe();
+        Lacze.Rysuj();
         break;
     case 'r':
+        Lacze.DodajNazwePliku("../datasets/sciezka.dat", PzG::RR_Ciagly, 2);
         std::cout << "Wznoszenie..." << std::endl;
         for (int i = 0; i < 400; ++i)
         {
@@ -302,7 +307,7 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
         std::cout << "Lot..." << std::endl;
         for (int i = 0; i < 50; ++i)
@@ -316,9 +321,9 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
-        for (int i = 0; i < 120; ++i)
+        for (int i = 0; i < 90; ++i)
         {
             korpus = korpus_orginal;
             for (int i = 0; i < 4; ++i)
@@ -329,24 +334,24 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
-        for (int j = 0; j < 5; ++j)
+        for (int i = 0; i < 25; ++i)
         {
-            for (int i = 0; i < 50; ++i)
+            korpus = korpus_orginal;
+            for (int i = 0; i < 4; ++i)
             {
-                korpus = korpus_orginal;
-                for (int i = 0; i < 4; ++i)
-                {
-                    rotor[i] = rotor_orginal[i];
-                }
-                przesuniecie(1);
-                obrot_rotorow();
-                zapisz();
-                Lacze.Rysuj();
-                usleep(25000);
+                rotor[i] = rotor_orginal[i];
             }
-            for (int i = 0; i < 60; ++i)
+            przesuniecie(1);
+            obrot_rotorow();
+            zapisz();
+            Lacze.Rysuj();
+            usleep(15000);
+        }
+        for (int j = 0; j < 7; ++j)
+        {
+            for (int i = 0; i < 45; ++i)
             {
                 korpus = korpus_orginal;
                 for (int i = 0; i < 4; ++i)
@@ -357,23 +362,23 @@ void dron::akcja(char wybor)
                 obrot_rotorow();
                 zapisz();
                 Lacze.Rysuj();
-                usleep(25000);
+                usleep(15000);
             }
-        }
-        for (int i = 0; i < 50; ++i)
-        {
-            korpus = korpus_orginal;
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < 25; ++i)
             {
-                rotor[i] = rotor_orginal[i];
+                korpus = korpus_orginal;
+                for (int i = 0; i < 4; ++i)
+                {
+                    rotor[i] = rotor_orginal[i];
+                }
+                przesuniecie(2 * sin(M_PI / 4));
+                obrot_rotorow();
+                zapisz();
+                Lacze.Rysuj();
+                usleep(15000);
             }
-            przesuniecie(1);
-            obrot_rotorow();
-            zapisz();
-            Lacze.Rysuj();
-            usleep(25000);
         }
-        for (int i = 0; i < 120; ++i)
+        for (int i = 0; i < 45; ++i)
         {
             korpus = korpus_orginal;
             for (int i = 0; i < 4; ++i)
@@ -384,7 +389,33 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
+        }
+        for (int i = 0; i < 25; ++i)
+        {
+            korpus = korpus_orginal;
+            for (int i = 0; i < 4; ++i)
+            {
+                rotor[i] = rotor_orginal[i];
+            }
+            przesuniecie(1);
+            obrot_rotorow();
+            zapisz();
+            Lacze.Rysuj();
+            usleep(15000);
+        }
+        for (int i = 0; i < 90; ++i)
+        {
+            korpus = korpus_orginal;
+            for (int i = 0; i < 4; ++i)
+            {
+                rotor[i] = rotor_orginal[i];
+            }
+            obrot(1);
+            obrot_rotorow();
+            zapisz();
+            Lacze.Rysuj();
+            usleep(15000);
         }
         for (int i = 0; i < 50; ++i)
         {
@@ -397,7 +428,7 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
         std::cout << "Lądowanie..." << std::endl;
         for (int i = 0; i < 400; ++i)
@@ -411,8 +442,10 @@ void dron::akcja(char wybor)
             obrot_rotorow();
             zapisz();
             Lacze.Rysuj();
-            usleep(25000);
+            usleep(15000);
         }
+        Lacze.UsunOstatniaNazwe();
+        Lacze.Rysuj();
         break;
     default:
         break;

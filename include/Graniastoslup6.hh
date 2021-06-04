@@ -13,7 +13,7 @@ public:
 };
 Graniastoslup6::~Graniastoslup6()
 {
-    /*delete*/free (wymiar);
+   free(wymiar);
 }
 Graniastoslup6::Graniastoslup6(Wektor3D sro, double h, double r, std::string nazwa)
 {

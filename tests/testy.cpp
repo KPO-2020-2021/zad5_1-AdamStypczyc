@@ -1,14 +1,12 @@
 #include "../tests/doctest/doctest.h"
 #include "lacze_do_gnuplota.hh"
-#include "Prostopadloscian.hh"
-#include "Graniastoslup6.hh"
+#include "Scena.hh"
 
-// TEST_CASE("rysowanie sześciokąta 1")
-// {
-//     Graniastoslup6 Pr;
-//     Wektor3D poczatek ={{0,0,0}};
-//     Pr = Graniastoslup6(poczatek, 60, 40);
-//     PzG::LaczeDoGNUPlota Lacze;
-//     if (!ZapisWspolrzednychDoPliku2("../datasets/gra6.dat", Pr))
-//     Lacze.Rysuj();
-// }
+TEST_CASE("Informacja")
+{
+    // PzG::LaczeDoGNUPlota Lacze;
+    // std::cout << "Klasa wektor, macierz nie były testowane\npoza funkcjami nowymi\nklasa prostopadloscian i graniastoslup6 nie byly testowane\nponiewaz rysuja one tylko swoje figury i widac to dobrze na gnuplocie\n"<<std::endl;
+    // Wektor3D *x;
+    // Prostopadloscian x = Prostopadloscian({0,0,0}, 30,50,50,"../datasets/test.dat");
+    // Lacze.DodajNazwePliku("../datasets/test.dat", PzG::RR_Ciagly, 2);
+}

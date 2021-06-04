@@ -20,6 +20,14 @@ class Wektor
 public:
     static int ilosc_stworzonych, ilosc_tymczasowych;
     Wektor();
+    constexpr Wektor(const Wektor &vector)
+    {
+        for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
+        {
+            wektorek[i] = vector.wektorek[i];
+        }
+        ilosc_tymczasowych++;
+    }
     ~Wektor();
     Wektor(const std::initializer_list<Templ_Typ_Wektor> &ListaWsp);
     /*!
@@ -54,6 +62,9 @@ public:
     Wektor operator/(const Templ_Typ_Wektor &tmp);
 
     bool operator==(const Wektor V) const;
+
+    Wektor &operator=(const Wektor &v);
+    Wektor &operator=(const float &v);
 };
 
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
@@ -83,6 +94,7 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::~Wektor()
 {
     ilosc_tymczasowych--;
 }
+
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
  * \brief Konstruktor parametryczny klasy wektor.
@@ -97,6 +109,8 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::Wektor(const std::initializer_li
     {
         wektorek[++index] = wartosc_i;
     }
+    ilosc_stworzonych++;
+    ilosc_tymczasowych++;
 }
 
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
@@ -174,6 +188,25 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> Wektor<Templ_Typ_Wektor, Templ_Ro
     }
     return result;
 }
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> &Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::operator=(const Wektor &v)
+{
+    for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
+    {
+        wektorek[i] = v.wektorek[i];
+    }
+    return *this;
+}
+
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> &Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::operator=(const float &v)
+{
+    for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
+    {
+        wektorek[i] = v;
+    }
+    return *this;
+}
 
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
@@ -199,7 +232,6 @@ bool Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::operator==(const Wektor<Tem
     }
     return false;
 }
-
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
  * \brief Przeciążenie operatora strumieniowego out dla wektora.
