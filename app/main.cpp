@@ -29,8 +29,15 @@
 
 int main()
 {
-       PzG::LaczeDoGNUPlota Lacze;
        Scena Scena1;
+       Wektor3D informacyjny;
+       std::cout << "--------------------------------------------------------" << std::endl;
+       std::cout << "             Ilość stworzonych wektorów: " << Wektor3D::ilosc_stworzonych << std::endl;
+       std::cout << "  Ilość aktualnie istniejących wektorów: " << Wektor3D::ilosc_tymczasowych << std::endl;
+       std::cout << "--------------------------------------------------------" << std::endl;
 
-       Scena1.menu(Lacze);
+       while (Scena1.dzialanie())
+       {
+              Scena1.pokaz_lacze().Rysuj();
+       }
 }

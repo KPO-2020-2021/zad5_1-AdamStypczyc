@@ -1,7 +1,7 @@
 #pragma once
-#include <iomanip>
 #include "Macierz.hh"
 #include "Wektor3D.hh"
+#include <fstream>
 #include <vector>
 /*!
  * \brief Klasa Graniastoslup.
@@ -11,36 +11,32 @@
 class Graniastoslup
 {
 protected:
-    //std::vector<Wektor3D> wspol;
+    std::vector<Wektor3D> wspol;
+    Wektor3D *wymiar;
+    Wektor3D srodek;
+    std::string nazwa_pliku;
 
 public:
-    std::vector<Wektor3D> wspol;
-    Graniastoslup();
     ~Graniastoslup();
     Wektor3D &operator[](int i);
     const Wektor3D operator[](int i) const;
-    Graniastoslup operator+(const Wektor3D translacja); //sprawdzanie długości boków po obrocie
-    void wyswietl_wspolrzedne();
-    Graniastoslup operator*(Macierz3x3 Macierz_obrotu); //mnożenie prostokąt razy macierz
-    Graniastoslup &operator*(double skala);
+
+    void ustaw_srodek(Wektor3D sro);
+    void ustaw_nazwa(std::string nazwa);
+    Wektor3D pokaz_srodek() const;
+    std::string pokaz_nazwa() const;
+
+    void translacja(Wektor3D translacja);
+    void rotacja(Macierz3x3 obrot);
+
+    void zapis();
 };
-/*!
- * \brief Konstruktor bezparametryczny klasy Graniastoslup.
- * Przypisuje wszystkim współrzędnym ten sam punkt (0,0,0)
- */
-Graniastoslup::Graniastoslup()
-{
-    for (int i = 0; i < (int)wspol.size(); i++)
-    {
-        wspol[i] = Wektor3D();
-    }
-}
 /*!
  * \brief Destruktor klasy Graniastoslup.
  */
 Graniastoslup::~Graniastoslup()
 {
-    wspol.clear();
+    /*delete*/free (wymiar);
 }
 /*!
  * \brief Przeciążenie operatora [] set.
@@ -60,58 +56,67 @@ const Wektor3D Graniastoslup::operator[](int i) const
 {
     return wspol[i];
 }
-/*!
- * \brief Przeciążenie operatora dodawania.
- * Umożliwia dodanie Wektora3D do prostopadłościanu przesuwając go o zadany wektor.
- * \param translacja Wektor3D odpowiadający wktorowi o jaki chcemy przesunąć prostopadłościan
- * \return Zwraca stary prostopadłościan przesunięty o wektor.
- */
-Graniastoslup Graniastoslup::operator+(const Wektor3D translacja)
+void Graniastoslup::ustaw_srodek(Wektor3D sro)
 {
-    for (int i = 0; i < SIZE; i++)
+    this->srodek = sro;
+}
+void Graniastoslup::ustaw_nazwa(std::string nazwa)
+{
+    this->nazwa_pliku = nazwa;
+}
+Wektor3D Graniastoslup::pokaz_srodek() const
+{
+    return this->srodek;
+}
+std::string Graniastoslup::pokaz_nazwa() const
+{
+    return this->nazwa_pliku;
+}
+
+void Graniastoslup::translacja(Wektor3D translacja)
+{
+    for (int i = 0; i < (int)wspol.size(); ++i)
     {
         wspol[i] = wspol[i] + translacja;
     }
-    return *this;
+    srodek = srodek + translacja;
 }
 
-/*!
- * \brief Przeciążenie operatora mnożenia Prostopadłościan*Macierz.
- * Umożliwia mnożenie psrostopadłościanu razy macierz3x3.
- * \param Macierz_obrotu macierz odpowiadająca macierzy obrotu
- * \param _x wartość do której przypiszemy wartość X jednej z współrzędnych prostopadłościanu, żeby nie zmienić przypadkowo wartości i nie operować na błędnej wartości
- * \param _y wartość do której przypiszemy wartość Y jednej z współrzędnych prostopadłościanu, żeby nie zmienić przypadkowo wartości i nie operować na błędnej wartości
- * \param _z wartość do której przypiszemy wartość Z jednej z współrzędnych prostopadłościanu, żeby nie zmienić przypadkowo wartości i nie operować na błędnej wartości
- * \return Zwraca stary prostopadłościan odpowiednio obrócony.
- */
-Graniastoslup Graniastoslup::operator*(Macierz3x3 Macierz_obrotu)
+void Graniastoslup::rotacja(Macierz3x3 obrot)
 {
-    Graniastoslup wynik;
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < (int)wspol.size(); ++i)
     {
-        for (int j = 0; j < SIZE; j++)
-            wynik[i][j] += wspol[i][j] * Macierz_obrotu(i, j);
+        wspol[i] = (obrot * wspol[i]);
     }
-    return wynik;
+    srodek = obrot * srodek;
 }
-/*!
- * \brief Przeciążenie operatora mnożenia Prostopadłościan*double.
- * Umożliwia mnożenie Prostopadłościanu razy double. Daje to w efekcie jego przeskalowanie.
- * \param skala liczba mówiąca jak bardzo chcemy przesklować prostopadłościan.
- */
-Graniastoslup &Graniastoslup::operator*(double skala)
+
+void Graniastoslup::zapis()
 {
-    for (int i = 0; i < SIZE; ++i)
+    std::fstream StrmPlikowy;
+
+    Wektor3D translacja_srodka = {0, 0, (*wymiar)[2] / 2};
+
+    StrmPlikowy.open(nazwa_pliku, std::ios::out);
+
+    for (int i = 0; i < (int)wspol.size(); i += 2)
     {
-        wspol[i] = wspol[i] * skala;
+        StrmPlikowy << srodek + translacja_srodka << std::endl;
+        for (int j = 0; j < 2; ++j)
+        {
+            StrmPlikowy << wspol[j + i] << std::endl;
+        }
+        StrmPlikowy << srodek - translacja_srodka << std::endl
+                    << std::endl;
     }
-    return *this;
-}
-/*!
- * \brief Metoda wyświetlająca współrzędne prostopadłościanu.
- */
-void Graniastoslup::wyswietl_wspolrzedne()
-{
-    for (int i = 0; i < SIZE; ++i)
-        std::cout << std::setw(20) << std::fixed << std::setprecision(10) << wspol[i] << std::endl;
+
+    StrmPlikowy << srodek + translacja_srodka << std::endl;
+    for (int i = 0; i < 2; ++i)
+    {
+        StrmPlikowy << wspol[i] << std::endl;
+    }
+    StrmPlikowy << srodek - translacja_srodka << std::endl
+                << std::endl;
+                
+    StrmPlikowy.close();
 }

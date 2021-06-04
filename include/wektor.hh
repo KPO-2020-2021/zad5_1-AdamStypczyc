@@ -112,7 +112,7 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> Wektor<Templ_Typ_Wektor, Templ_Ro
     Wektor result;
     for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
     {
-        result[i] = wektorek[i] += v[i];
+        result[i] = wektorek[i] + v[i];
     }
     return result;
 }
@@ -130,7 +130,7 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> Wektor<Templ_Typ_Wektor, Templ_Ro
     Wektor result;
     for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
     {
-        result[i] = wektorek[i] -= v[i];
+        result[i] = wektorek[i] - v[i];
     }
     return result;
 }
