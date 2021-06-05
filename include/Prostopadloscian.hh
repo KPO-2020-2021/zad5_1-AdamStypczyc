@@ -2,20 +2,33 @@
 #include "Graniastoslup.hh"
 /*!
  * \brief Klasa Prostopadloscian.
- * Deklaracja klasy prostopadłościan. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na prostopadłościanie.
- * \param wspol deklaracja prostopadłościanu jako 8 wektorów 3D. Wspol jest skrótem od współrzędna.
+ * Deklaracja klasy prostopadłościan. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na prostopadłościanie, które są w większości dziedziczone z klasy Gransiatoslup.
+ * Sama w sobie posiada swój destruktor i konstruktor parametryczny
  */
 class Prostopadloscian : public Graniastoslup
 {
-
 public:
     ~Prostopadloscian();
-    Prostopadloscian(Wektor3D sro = Wektor3D(), double h = 30, double w = 50, double d = 50, std::string nazwa = "../datasets/prostopadloscian.dat");
+    Prostopadloscian(Wektor3D sro = Wektor3D(), double h = 30, double w = 50, double d = 50, std::string nazwa = "");
 };
+/*!
+ * \brief Destruktor klasy prostopadłościan
+ * Zwalnia zaalokowaną pamięć
+ */
 Prostopadloscian::~Prostopadloscian()
 {
     free(wymiar);
 }
+/*!
+ * \brief Konstruktor parametryczny klasy prostopadłościan 
+ * Tworzy prostopadłościan względem punktu srodka.
+ * \param sro punkt odpowiadający srodkowi 
+ * \param h wartość odpowiadająca wysokości korpusu prostopadłościanu, tutaj ustawiona na 30
+ * \param w wartość odpowiadająca szerokości korpusu prostopadłościanu, tutaj ustawiona na 50
+ * \param d wartość odpowiadająca głębokości korpusu prostopadłościanu, tutaj ustawiona na 50
+ * \param nazwa nazwa pliku który przypisujemy danej bryle
+ * \param tmp pomocznicy Wektor3D dzięki któremu wpisujemy wartosci współrzędnych
+ */
 Prostopadloscian::Prostopadloscian(Wektor3D sro, double h, double w, double d, std::string nazwa)
 {
     wymiar = new Wektor3D({w, d, h});

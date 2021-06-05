@@ -21,13 +21,14 @@ private:
     Templ_Typ value[Templ_Rozmiar][Templ_Rozmiar]; // Wartosci macierzy
 
 public:
-    Macierz(Templ_Typ tmp[Templ_Rozmiar][Templ_Rozmiar]); 
+    Macierz(Templ_Typ tmp[Templ_Rozmiar][Templ_Rozmiar]);
 
-    Macierz(); 
+    Macierz();
 
     Macierz operator+(Macierz tmp);
     Macierz operator-(Macierz tmp);
     Macierz operator*(Macierz tmp);
+    Macierz operator*(double tmp);
     Wektor3D operator*(Wektor3D tmp);
 
     Templ_Typ &operator()(unsigned int row, unsigned int column);
@@ -136,9 +137,16 @@ Macierz<Templ_Typ, Templ_Rozmiar> Macierz<Templ_Typ, Templ_Rozmiar>::operator*(M
     return result;
 }
 template <typename Templ_Typ, unsigned int Templ_Rozmiar>
+/*!
+ * \brief Przeciążenie operatora mnożenia Macierz*Wektor3D.
+ * Przeciążenie operatora mnożenia, aby umożliwić mnożenie macierzy i wektora.
+ * \param tmp Wektor3D 
+ * \param result macierz pomocnicza odpowiadająca macierzy wynikowej mnożenia.
+ * \return Wynik mnożenia w postaci macierzy result.
+ */
 Wektor3D Macierz<Templ_Typ, Templ_Rozmiar>::operator*(Wektor3D tmp)
 {
-    assert(Templ_Rozmiar==3);
+    assert(Templ_Rozmiar == 3);
     Wektor3D result;
     for (int i = 0; i < 3; ++i)
     {
@@ -147,7 +155,28 @@ Wektor3D Macierz<Templ_Typ, Templ_Rozmiar>::operator*(Wektor3D tmp)
             result[i] += value[i][j] * tmp[j];
         }
     }
-    
+
+    return result;
+}
+template <typename Templ_Typ, unsigned int Templ_Rozmiar>
+/*!
+ * \brief Przeciążenie operatora mnożenia Macierz*double.
+ * Przeciążenie operatora mnożenia, aby umożliwić mnożenie macierzy i jakiejś wartości typu double.
+ * \param tmp zmienna typu double 
+ * \param result macierz pomocnicza odpowiadająca macierzy wynikowej mnożenia.
+ * \return Wynik mnożenia w postaci macierzy result.
+ */
+Macierz<Templ_Typ, Templ_Rozmiar> Macierz<Templ_Typ, Templ_Rozmiar>::operator*(double tmp)
+{
+    Macierz result;
+    for (unsigned int i = 0; i < Templ_Rozmiar; ++i)
+    {
+        for (unsigned int j = 0; j < Templ_Rozmiar; ++j)
+        {
+            result(i, j) = this->value[i][j] * tmp;
+        }
+    }
+
     return result;
 }
 template <typename Templ_Typ, unsigned int Templ_Rozmiar>

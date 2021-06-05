@@ -29,15 +29,21 @@
 
 int main()
 {
-       Scena Scena1;
-       Wektor3D informacyjny;
+       if (1)
+       {
+              Scena Scena1;
+              std::cout << "--------------------------------------------------------" << std::endl;
+              std::cout << "             Ilość stworzonych wektorów: " << Wektor3D::ilosc_stworzonych << std::endl;
+              std::cout << "  Ilość aktualnie istniejących wektorów: " << Wektor3D::ilosc_tymczasowych << std::endl;
+              std::cout << "--------------------------------------------------------" << std::endl;
+
+              while (Scena1.dzialanie())
+              {
+                     Scena1.pokaz_lacze().Rysuj();
+              }
+       }
        std::cout << "--------------------------------------------------------" << std::endl;
        std::cout << "             Ilość stworzonych wektorów: " << Wektor3D::ilosc_stworzonych << std::endl;
        std::cout << "  Ilość aktualnie istniejących wektorów: " << Wektor3D::ilosc_tymczasowych << std::endl;
        std::cout << "--------------------------------------------------------" << std::endl;
-
-       while (Scena1.dzialanie())
-       {
-              Scena1.pokaz_lacze().Rysuj();
-       }
 }

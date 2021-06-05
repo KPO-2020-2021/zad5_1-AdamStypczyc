@@ -12,6 +12,8 @@ template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
  * Szablon ten jest szablonem klasy Wektor. Zawiera on elementy potrzebne do utworzenia wektora oraz wykonywania na nim różnych operacji.
  * Zawiera on tablicę o rozmiarach odopowiadających naszemu wektorowi.
  * \param wektorek tablica w której będą zapisywane wartości wektora
+ * \param ilosc_stworzonych zmienna dzięki której jest możliwe zliczanie ile wektorów stworzyliśmy
+ * \param ilosc_tymczasowych zmienna dzięki której jest możliwe zliczanie ile wektorów aktualnie istnieje
  */
 class Wektor
 {
@@ -20,14 +22,7 @@ class Wektor
 public:
     static int ilosc_stworzonych, ilosc_tymczasowych;
     Wektor();
-    constexpr Wektor(const Wektor &vector)
-    {
-        for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
-        {
-            wektorek[i] = vector.wektorek[i];
-        }
-        ilosc_tymczasowych++;
-    }
+    Wektor(const Wektor &vector);
     ~Wektor();
     Wektor(const std::initializer_list<Templ_Typ_Wektor> &ListaWsp);
     /*!
@@ -64,12 +59,17 @@ public:
     bool operator==(const Wektor V) const;
 
     Wektor &operator=(const Wektor &v);
-    Wektor &operator=(const float &v);
 };
 
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+/*!
+ * \brief Przypisanie wartości początkowej zmiennej ilosc_stworzonych
+ */
 int Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::ilosc_stworzonych = 0;
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+/*!
+ * \brief Przypisanie wartości początkowej zmiennej ilosc_tymczasowych
+ */
 int Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::ilosc_tymczasowych = 0;
 
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
@@ -85,6 +85,19 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::Wektor()
     {
         wektork_i = 0;
     }
+}
+template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+/*!
+ * \brief Konstruktor kopiujący klasy wektor.
+ * Przypisuje elementom klasy wektor wartość innego elementu tej samej klasy.
+ */
+Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::Wektor(const Wektor &vector)
+{
+    for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
+    {
+        wektorek[i] = vector.wektorek[i];
+    }
+    ilosc_tymczasowych++;
 }
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
 /*!
@@ -189,21 +202,17 @@ Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> Wektor<Templ_Typ_Wektor, Templ_Ro
     return result;
 }
 template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
+/*!
+ * \brief Przeciążenie operatora przypisanie dla wektora.
+ * Przeciążenie umożliwiające przypisanie wektora do innego wektora.
+ * \param v wektor którego wartości chcemy przypisać
+ * \return Zwraca wektor wartość *this.
+ */
 Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> &Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::operator=(const Wektor &v)
 {
     for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
     {
         wektorek[i] = v.wektorek[i];
-    }
-    return *this;
-}
-
-template <typename Templ_Typ_Wektor, unsigned int Templ_Rozmiar_Wektor>
-Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor> &Wektor<Templ_Typ_Wektor, Templ_Rozmiar_Wektor>::operator=(const float &v)
-{
-    for (unsigned int i = 0; i < Templ_Rozmiar_Wektor; ++i)
-    {
-        wektorek[i] = v;
     }
     return *this;
 }

@@ -1,20 +1,36 @@
 #pragma once
 #include <iomanip>
 #include "dron.hh"
+/*!
+ * \brief Definicje globalne
+ * \param ZAKRES zakres gnuplota
+ * \param POCZATEK początek siatki
+ * \param POLOZENIE_1 położenie startowe drona 0
+ * \param POLOZENIE_2 położenie startowe drona 1 
+ * \param ROZMIAR ilość kratek w siatce
+ */
 #define ZAKRES 700
 #define POCZATEK \
     {            \
         0, 0, 0  \
     }
-#define ROZMIAR 14
+#define ROZMIAR 15
 #define POLOZENIE_1  \
     {                \
-        100, 100, 15 \
+        170, 170, 15 \
     }
 #define POLOZENIE_2  \
     {                \
         400, 400, 15 \
     }
+
+/*!
+ * \brief Deklaracja klasy Scena
+ * Łączy wszystko w całość
+ * \param Lacze łącze do gnuplota
+ * \param tab_dronów tablica wskaźników na obiekty klasy dron
+ * \param siatka podłoże na którym ląduje dron
+ */
 class Scena
 {
     PzG::LaczeDoGNUPlota Lacze;
@@ -28,10 +44,21 @@ public:
     void stworz_siatka(std::string nazwa);
     PzG::LaczeDoGNUPlota pokaz_lacze();
 };
+/*!
+ * \brief Metoda zwracająca łącze do gnuplota
+ * \return Zwraca łącze.
+ */
 PzG::LaczeDoGNUPlota Scena::pokaz_lacze()
 {
     return this->Lacze;
 }
+
+/*!
+ * \brief Metoda tworząca podłoże na którym może wylądować dron
+ * \param nazwa nazwa pliku do którego ma zostać wpisana siatka
+ * \param StrmPlikowy strumień umożliwiający zapis do pliku
+ * \param odstep odległość pomiędzy kratkami w siatce
+ */
 void Scena::stworz_siatka(std::string nazwa)
 {
     std::fstream StrmPlikowy;
@@ -72,6 +99,10 @@ void Scena::stworz_siatka(std::string nazwa)
     StrmPlikowy << std::endl;
     StrmPlikowy.close();
 }
+/*!
+ * \brief Konstruktor bezparametryczny klasy scena
+ * Konstruktor tworzący siatkę i dwa drony, inicjalizujący Lacze i ustawiający jego zakres.
+ */
 Scena::Scena()
 {
     Lacze.ZmienTrybRys(PzG::TR_3D);
@@ -84,8 +115,8 @@ Scena::Scena()
     Lacze.UstawRotacjeXZ(60, 30);
     Lacze.UstawSkaleXZ(1, 1);
 
-    stworz_siatka("../datasets/siatka.dat");
-    Lacze.DodajNazwePliku("../datasets/siatka.dat", PzG::RR_Ciagly, 2);
+    stworz_siatka("../datasets/siatka.dat"); 
+    Lacze.DodajNazwePliku("../datasets/siatka.dat", PzG::RR_Ciagly, 1);
     Wektor3D pozycja = POLOZENIE_1;
     tab_dronow[0] = new dron(0, Lacze, pozycja);
     tab_dronow[0]->zapisz();
@@ -95,11 +126,20 @@ Scena::Scena()
 
     Lacze.Rysuj();
 }
+/*!
+ * \brief Destruktor klasy scena. 
+ * Zwalnia pamięć zaalokowaną na drony.
+ */
 Scena::~Scena()
 {
     free(tab_dronow[0]);
     free(tab_dronow[1]);
 }
+/*!
+ * \brief Metoda dająca użytkowikowi dostęp.
+ * Metoda sklejająca cały program umożliwiajaca sterowanie dronami i podejmowania akcji.
+ * \param wybor wybór użytkownika
+ */
 bool Scena::dzialanie()
 {
     int index = 0;

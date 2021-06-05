@@ -1,9 +1,24 @@
 #pragma once
-#include <unistd.h> //dla usleep
+#include <unistd.h>
 #include "Prostopadloscian.hh"
 #include "Graniastoslup6.hh"
 #include "lacze_do_gnuplota.hh"
 
+/*!
+ * \brief Klasa dron
+ * Deklaracja klasy dron. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji dronie.
+ * Zawiera ona elementy klasy prostopadloscian i gransiatoslup6.
+ * \param sciezka zmienna odpowiadająca za wyświetlanie drogi przebytej przez protopadłościan
+ * \param Lacze lacze do gnuplota
+ * \param korpus_orginal prostopadloscian odpowiadajacy oryginalnemu korpusowi
+ * \param korpus  prostopadloscian odpowiadajacy korpusowi na którym będziemy pracować
+ * \param rotor_orginal tablica oryginalnych rotorów
+ * \param rotor tablica rotorów na których będziemy pracować
+ * \param obr macierz obrotu drona
+ * \param droga wektor przesuniecia drona
+ * \param kat kat położenia drona
+ * \param index numer drona
+ */
 class dron
 {
     std::vector<Wektor3D> sciezka;
@@ -28,10 +43,17 @@ public:
 
     void zapisz();
     void akcja(char wybor);
-    void przypisz_droge(double droga);
+    void przypisz_sciezke(double droga);
 
     Wektor3D pokaz_srodek() const;
 };
+/*!
+ * \brief Konstruktor parametryczny klasy dron.
+ * Buduje drona i tworzy pliki w których będą zapisywanie punkty. Przypisuje dronowi jego index, tworzy Lacze oraz przestawia go o zadany wektor początkowy. 
+ * \param ind zmienna odpowiadająca indeksowi
+ * \param Lacze1 zmienna odpowiadająca laczy do gnuplota dzięki ktoremu tworzymy lacze
+ * \param polozenie wektor o jaki zostanie przestawiony dron
+ */
 dron::dron(int ind, PzG::LaczeDoGNUPlota &Lacze1, Wektor3D polozenie) : Lacze(Lacze1)
 {
     kat = 0;
@@ -60,6 +82,12 @@ dron::dron(int ind, PzG::LaczeDoGNUPlota &Lacze1, Wektor3D polozenie) : Lacze(La
     this->droga = this->droga + polozenie;
 }
 
+/*!
+ * \brief Metoda odpowiadająca za ruch pionowy
+ * Przesuwa drona w górę o wartość podaną przez zmienną pion.
+ * \param pion mówi o ile ma przesunąć drona
+ * \param tmp Wektor3D pomocniczy
+ */
 void dron::ruch_pionowy(double pion)
 {
     Wektor3D tmp;
@@ -68,6 +96,12 @@ void dron::ruch_pionowy(double pion)
     korpus.rotacja(this->obr);
     korpus.translacja(this->droga);
 }
+/*!
+ * \brief Metoda odpowiadająca za przesuniecie drona w płaszczyźnie równoległej do płaszczyzny XY
+ * Przesuwa drona w płaszczyźnie XY o wartość podaną przez zmienną droga.
+ * \param droga mówi o ile ma przesunąć drona
+ * \param tmp Wektor3D pomocniczy
+ */
 void dron::przesuniecie(double droga)
 {
     Wektor3D tmp;
@@ -78,6 +112,12 @@ void dron::przesuniecie(double droga)
     korpus.translacja(this->droga);
 }
 
+/*!
+ * \brief Metoda odpowiadająca za obrót drona
+ * Obraca drona o zadany kąt.
+ * \param kat_obrotu mówi o ile ma obrócić dron 
+ * \param radian kąt wyrażony w radianach
+ */
 void dron::obrot(double kat_obrotu)
 {
     this->kat = this->kat + kat_obrotu;
@@ -87,6 +127,12 @@ void dron::obrot(double kat_obrotu)
     korpus.rotacja(obr);
     korpus.translacja(this->droga);
 }
+/*!
+ * \brief Metoda odpowidająca za obrót rotorów
+ * \param tmp1 macierz przechowująca macierz obrotu
+ * \param tmp macierz obracająca rotory 1 i 3
+ * \param tmp_v2 macierz obracajaca rotory 0 i 2
+ */
 void dron::obrot_rotorow()
 {
     static int kat = 0;
@@ -97,21 +143,28 @@ void dron::obrot_rotorow()
     }
     double tab[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
     Macierz3x3 tmp = Macierz3x3(tab);
+    Macierz3x3 tmp_v2 = Macierz3x3(tab);
     Macierz3x3 tmp1;
     double radian;
     radian = StopienNaRadianZ(kat);
     Oblicz_Macierz_ObrotuZ(radian, tmp1);
     tmp = tmp * tmp1;
-    for (int i = 0; i < 4; ++i)
-    {
-        rotor[i].rotacja(tmp);
-    }
+    Oblicz_Macierz_ObrotuZ(-radian, tmp1);
+    tmp_v2 = tmp_v2 * tmp1;
+    rotor[0].rotacja(tmp_v2);
+    rotor[1].rotacja(tmp);
+    rotor[2].rotacja(tmp_v2);
+    rotor[3].rotacja(tmp);
+
     for (int i = 0; i < 4; ++i)
     {
         rotor[i].translacja(korpus[2 * i]);
     }
 }
 
+/*!
+ * \brief Metoda zapisujaca drona do plików
+ */
 void dron::zapisz()
 {
     korpus.zapis();
@@ -120,6 +173,12 @@ void dron::zapisz()
         rotor[i].zapis();
     }
 }
+/*!
+ * \brief Metoda odpowiadająca za porusanie się i animację drona.
+ * \param wybor informacja jaką opcję wybrał użytkownik 
+ * \param droga zmienna pomocnicza do której przypisywana jest droga
+ * \param kat zmienna do której użytkownik przypisuje kąt obrotu
+ */
 void dron::akcja(char wybor)
 {
     double droga;
@@ -214,6 +273,7 @@ void dron::akcja(char wybor)
                 std::cin.ignore(1024, '\n');
             }
         }
+        std::cout << "Ustawianie..." << std::endl;
         if (kat < 0)
         {
             for (int i = 0; i > kat; --i)
@@ -246,8 +306,8 @@ void dron::akcja(char wybor)
                 usleep(15000);
             }
         }
-        przypisz_droge(droga);
-        Lacze.DodajNazwePliku("../datasets/sciezka.dat", PzG::RR_Ciagly, 2);
+        przypisz_sciezke(droga);
+        Lacze.DodajNazwePliku("../datasets/sciezka.dat", PzG::RR_Ciagly, 1);
         std::cout << "Wznoszenie..." << std::endl;
         for (int i = 0; i < 400; ++i)
         {
@@ -294,7 +354,6 @@ void dron::akcja(char wybor)
         Lacze.Rysuj();
         break;
     case 'r':
-        Lacze.DodajNazwePliku("../datasets/sciezka.dat", PzG::RR_Ciagly, 2);
         std::cout << "Wznoszenie..." << std::endl;
         for (int i = 0; i < 400; ++i)
         {
@@ -444,7 +503,6 @@ void dron::akcja(char wybor)
             Lacze.Rysuj();
             usleep(15000);
         }
-        Lacze.UsunOstatniaNazwe();
         Lacze.Rysuj();
         break;
     default:
@@ -455,7 +513,12 @@ void dron::akcja(char wybor)
     std::cout << "  Ilość aktualnie istniejących wektorów: " << Wektor3D::ilosc_tymczasowych << std::endl;
     std::cout << "--------------------------------------------------------" << std::endl;
 }
-void dron::przypisz_droge(double droga)
+
+/*!
+ * \brief Metoda odpowiadjąca za budowę ścieżki lotu drona
+ * \param droga długość drogi
+ */
+void dron::przypisz_sciezke(double droga)
 {
     Wektor3D next = korpus.pokaz_srodek();
     next[2] = 0;
@@ -477,6 +540,9 @@ void dron::przypisz_droge(double droga)
     }
     StrmPlikowy.close();
 }
+/*!
+ * \brief Metoda zwracająca Wektor3D będący środkiem korpusu drona.
+ */
 Wektor3D dron::pokaz_srodek() const
 {
     return korpus.pokaz_srodek();

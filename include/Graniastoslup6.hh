@@ -2,19 +2,32 @@
 #include "Graniastoslup.hh"
 /*!
  * \brief Klasa Graniastoslup6.
- * Deklaracja klasy prostopadłościan. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na prostopadłościanie.
- * \param wspol deklaracja prostopadłościanu jako 8 wektorów 3D. Wspol jest skrótem od współrzędna.
+ * Deklaracja klasy Graniastoslup6. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na Graniastoslup6, które są w większości dziedziczone z klasy Gransiatoslup.
+ * Sama w sobie posiada swój destruktor i konstruktor parametryczny.
  */
 class Graniastoslup6 : public Graniastoslup
 {
 public:
     ~Graniastoslup6();
-    Graniastoslup6(Wektor3D sro = Wektor3D(), double h = 15, double r = 20, std::string nazwa = "../datasets/graniastoslup6.dat");
+    Graniastoslup6(Wektor3D sro = Wektor3D(), double h = 15, double r = 20, std::string nazwa = "");
 };
+/*!
+ * \brief Destruktor klasy Graniastoslup6
+ * Zwalnia zaalokowaną pamięć
+ */
 Graniastoslup6::~Graniastoslup6()
 {
    free(wymiar);
 }
+/*!
+ * \brief Konstruktor parametryczny klasy Graniastoslup6 
+ * Tworzy Graniastoslup6 względem punktu srodka.
+ * \param sro punkt odpowiadający srodkowi 
+ * \param h wartość odpowiadająca wysokości rotora, tutaj ustawiona na 15
+ * \param r promień okręgu na którym zbudowane są podstawy górne i dolna rotora tutaj ustawiona na 20
+ * \param nazwa nazwa pliku który przypisujemy danej bryle
+ * \param tmp pomocznicy Wektor3D dzięki któremu wpisujemy wartosci współrzędnych
+ */
 Graniastoslup6::Graniastoslup6(Wektor3D sro, double h, double r, std::string nazwa)
 {
     double radian = 60 * M_PI / 180;
