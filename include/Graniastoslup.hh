@@ -21,7 +21,6 @@ protected:
     std::string nazwa_pliku;
 
 public:
-    ~Graniastoslup();
     Wektor3D &operator[](int i);
     const Wektor3D operator[](int i) const;
 
@@ -35,14 +34,6 @@ public:
 
     void zapis();
 };
-/*!
- * \brief Destruktor klasy Graniastoslup.
- */
-Graniastoslup::~Graniastoslup()
-{
-    std::cout << "Dupa" << std::endl;
-    free(wymiar);
-}
 /*!
  * \brief Przeciążenie operatora [] set.
  * Umożliwia zmianę wartości poszczególnej wszpółrzędnej graniastoslupa.
