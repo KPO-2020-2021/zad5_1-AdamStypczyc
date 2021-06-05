@@ -115,7 +115,7 @@ Scena::Scena()
     Lacze.UstawRotacjeXZ(60, 30);
     Lacze.UstawSkaleXZ(1, 1);
 
-    stworz_siatka("../datasets/siatka.dat"); 
+    stworz_siatka("../datasets/siatka.dat");
     Lacze.DodajNazwePliku("../datasets/siatka.dat", PzG::RR_Ciagly, 1);
     Wektor3D pozycja = POLOZENIE_1;
     tab_dronow[0] = new dron(0, Lacze, pozycja);
@@ -178,12 +178,16 @@ bool Scena::dzialanie()
                     {
                         std::cout << "Nie udało się wybrać drona :(" << std::endl;
                         std::cout << "Wybierz jeszcze raz :(" << std::endl;
+                        std::cin.clear();
+                        std::cin.ignore(1024, '\n');
                     }
                 }
                 else
                 {
                     std::cout << "Nie udało się wybrać drona :(" << std::endl;
                     std::cout << "Wybierz jeszcze raz :(" << std::endl;
+                    std::cin.clear();
+                    std::cin.ignore(1024, '\n');
                 }
             }
         }

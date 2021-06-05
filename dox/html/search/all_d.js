@@ -9,7 +9,7 @@ var searchData=
   ['pokazos_5foz_71',['PokazOs_OZ',['../class_pz_g_1_1_lacze_do_g_n_u_plota.html#a9fabfe88cb1801a5de8923f45f514b99',1,'PzG::LaczeDoGNUPlota::PokazOs_OZ(bool Pokaz)'],['../class_pz_g_1_1_lacze_do_g_n_u_plota.html#a22c708af33c57bf3b5d1b4e82b4017b7',1,'PzG::LaczeDoGNUPlota::PokazOs_OZ() const']]],
   ['polozenie_5f1_72',['POLOZENIE_1',['../_scena_8hh.html#aff3f2cb281e3d0eba9c3ca3b353e8176',1,'Scena.hh']]],
   ['polozenie_5f2_73',['POLOZENIE_2',['../_scena_8hh.html#a2cc8e391374b3dec24a573d145dfa2f8',1,'Scena.hh']]],
-  ['prostopadloscian_74',['Prostopadloscian',['../class_prostopadloscian.html',1,'Prostopadloscian'],['../class_prostopadloscian.html#a5c84b52392498f0a2715a836b1a92f71',1,'Prostopadloscian::Prostopadloscian()']]],
+  ['prostopadloscian_74',['Prostopadloscian',['../class_prostopadloscian.html',1,'Prostopadloscian'],['../class_prostopadloscian.html#a42f6bafe041911060352f7e307dccc58',1,'Prostopadloscian::Prostopadloscian()']]],
   ['prostopadloscian_2ehh_75',['Prostopadloscian.hh',['../_prostopadloscian_8hh.html',1,'']]],
   ['przeslijdognuplota_76',['PrzeslijDoGNUPlota',['../class_pz_g_1_1_lacze_do_g_n_u_plota.html#a5063854b7232a7951d120a21df63f2b7',1,'PzG::LaczeDoGNUPlota']]],
   ['przesuniecie_77',['przesuniecie',['../classdron.html#a064414beef887c2a9c3cb73956f6b8e2',1,'dron']]],

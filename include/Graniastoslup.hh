@@ -123,7 +123,6 @@ void Graniastoslup::rotacja(Macierz3x3 obrot)
 void Graniastoslup::zapis()
 {
     std::fstream StrmPlikowy;
-
     Wektor3D translacja_srodka = {0, 0, (*wymiar)[2] / 2};
 
     StrmPlikowy.open(nazwa_pliku, std::ios::out);

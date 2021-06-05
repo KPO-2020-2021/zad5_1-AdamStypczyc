@@ -1,6 +1,5 @@
 #ifndef WEKTOR_HH
 #define WEKTOR_HH
-
 #include <iostream>
 #include <cassert>
 #include <initializer_list>

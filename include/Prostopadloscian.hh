@@ -3,22 +3,13 @@
 /*!
  * \brief Klasa Prostopadloscian.
  * Deklaracja klasy prostopadłościan. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na prostopadłościanie, które są w większości dziedziczone z klasy Gransiatoslup.
- * Sama w sobie posiada swój destruktor i konstruktor parametryczny
+ * Sama w sobie posiada swój konstruktor parametryczny
  */
 class Prostopadloscian : public Graniastoslup
 {
 public:
-    ~Prostopadloscian();
-    Prostopadloscian(Wektor3D sro = Wektor3D(), double h = 30, double w = 50, double d = 50, std::string nazwa = "");
+    Prostopadloscian(Wektor3D sro = Wektor3D(), double h = 30, double w = 50, double d = 50, std::string nazwa = "../datasets/test_prosto.dat");
 };
-/*!
- * \brief Destruktor klasy prostopadłościan
- * Zwalnia zaalokowaną pamięć
- */
-Prostopadloscian::~Prostopadloscian()
-{
-    free(wymiar);
-}
 /*!
  * \brief Konstruktor parametryczny klasy prostopadłościan 
  * Tworzy prostopadłościan względem punktu srodka.
@@ -35,7 +26,7 @@ Prostopadloscian::Prostopadloscian(Wektor3D sro, double h, double w, double d, s
     this->nazwa_pliku = nazwa;
     this->srodek = sro;
     Wektor3D tmp;
-    /*!   0________2
+    /*  0________2
      *   /|        /|
      * 6/_|______4/ |
      * |  |      |  |

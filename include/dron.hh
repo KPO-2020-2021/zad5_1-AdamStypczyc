@@ -53,9 +53,11 @@ public:
  * \param ind zmienna odpowiadająca indeksowi
  * \param Lacze1 zmienna odpowiadająca laczy do gnuplota dzięki ktoremu tworzymy lacze
  * \param polozenie wektor o jaki zostanie przestawiony dron
+ * \param wek wektor o który dodatkowo przesuwamy rotor aby nie był on częściowo zawarty w korpusie drona 
  */
 dron::dron(int ind, PzG::LaczeDoGNUPlota &Lacze1, Wektor3D polozenie) : Lacze(Lacze1)
 {
+    Wektor3D wek = {0, 0, 7.5};
     kat = 0;
     this->index = ind;
     korpus_orginal.ustaw_nazwa("../datasets/korpus" + std::to_string(index) + ".dat");
@@ -77,11 +79,10 @@ dron::dron(int ind, PzG::LaczeDoGNUPlota &Lacze1, Wektor3D polozenie) : Lacze(La
     }
     for (int i = 0; i < 4; ++i)
     {
-        rotor[i].translacja(korpus_orginal[2 * i] + polozenie);
+        rotor[i].translacja(korpus_orginal[2 * i] + polozenie + wek);
     }
     this->droga = this->droga + polozenie;
 }
-
 /*!
  * \brief Metoda odpowiadająca za ruch pionowy
  * Przesuwa drona w górę o wartość podaną przez zmienną pion.
@@ -132,9 +133,11 @@ void dron::obrot(double kat_obrotu)
  * \param tmp1 macierz przechowująca macierz obrotu
  * \param tmp macierz obracająca rotory 1 i 3
  * \param tmp_v2 macierz obracajaca rotory 0 i 2
+ * \param wek wektor o który dodatkowo przesuwamy rotor aby nie "uderzał" on w korpus drona przy obracaniu
  */
 void dron::obrot_rotorow()
 {
+    Wektor3D wek = {0, 0, 7.5};
     static int kat = 0;
     kat += 3;
     if (kat == 360)
@@ -158,7 +161,7 @@ void dron::obrot_rotorow()
 
     for (int i = 0; i < 4; ++i)
     {
-        rotor[i].translacja(korpus[2 * i]);
+        rotor[i].translacja(korpus[2 * i] + wek);
     }
 }
 
@@ -183,7 +186,8 @@ void dron::akcja(char wybor)
 {
     double droga;
     double kat;
-
+    int licz = 0;
+    ++licz;
     zapisz();
     switch (wybor)
     {
@@ -520,6 +524,7 @@ void dron::akcja(char wybor)
  */
 void dron::przypisz_sciezke(double droga)
 {
+    sciezka.clear();
     Wektor3D next = korpus.pokaz_srodek();
     next[2] = 0;
     sciezka.push_back(next);

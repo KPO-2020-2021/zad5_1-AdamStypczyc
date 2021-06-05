@@ -3,22 +3,13 @@
 /*!
  * \brief Klasa Graniastoslup6.
  * Deklaracja klasy Graniastoslup6. Zawiera ona elementy i metody potrzebne do wykonywania różnych operacji na Graniastoslup6, które są w większości dziedziczone z klasy Gransiatoslup.
- * Sama w sobie posiada swój destruktor i konstruktor parametryczny.
+ * Sama w sobie posiada swój konstruktor parametryczny.
  */
 class Graniastoslup6 : public Graniastoslup
 {
 public:
-    ~Graniastoslup6();
-    Graniastoslup6(Wektor3D sro = Wektor3D(), double h = 15, double r = 20, std::string nazwa = "");
+    Graniastoslup6(Wektor3D sro = Wektor3D(), double h = 15, double r = 20, std::string nazwa = "../datasets/test_gr.dat");
 };
-/*!
- * \brief Destruktor klasy Graniastoslup6
- * Zwalnia zaalokowaną pamięć
- */
-Graniastoslup6::~Graniastoslup6()
-{
-   free(wymiar);
-}
 /*!
  * \brief Konstruktor parametryczny klasy Graniastoslup6 
  * Tworzy Graniastoslup6 względem punktu srodka.
