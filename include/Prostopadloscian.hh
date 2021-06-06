@@ -26,7 +26,7 @@ Prostopadloscian::Prostopadloscian(Wektor3D sro, double h, double w, double d, s
     this->nazwa_pliku = nazwa;
     this->srodek = sro;
     Wektor3D tmp;
-    /*  0________2
+    /*    0________2
      *   /|        /|
      * 6/_|______4/ |
      * |  |      |  |
@@ -38,28 +38,27 @@ Prostopadloscian::Prostopadloscian(Wektor3D sro, double h, double w, double d, s
      * 7         5
      * 
      */
-    tmp = {srodek[0]-(w/2), srodek[1]+(d/2), srodek[2]+(h/2)};
+    tmp = {srodek[0] - (w / 2), srodek[1] + (d / 2), srodek[2] + (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]-(w/2), srodek[1]+(d/2), srodek[2]-(h/2)};
+    tmp = {srodek[0] - (w / 2), srodek[1] + (d / 2), srodek[2] - (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]+(w/2), srodek[1]+(d/2), srodek[2]+(h/2)};
+    tmp = {srodek[0] + (w / 2), srodek[1] + (d / 2), srodek[2] + (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]+(w/2), srodek[1]+(d/2), srodek[2]-(h/2)};
+    tmp = {srodek[0] + (w / 2), srodek[1] + (d / 2), srodek[2] - (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]+(w/2), srodek[1]-(d/2), srodek[2]+(h/2)};
+    tmp = {srodek[0] + (w / 2), srodek[1] - (d / 2), srodek[2] + (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]+(w/2), srodek[1]-(d/2), srodek[2]-(h/2)};
+    tmp = {srodek[0] + (w / 2), srodek[1] - (d / 2), srodek[2] - (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]-(w/2), srodek[1]-(d/2), srodek[2]+(h/2)};
+    tmp = {srodek[0] - (w / 2), srodek[1] - (d / 2), srodek[2] + (h / 2)};
     wspol.push_back(tmp);
 
-    tmp = {srodek[0]-(w/2), srodek[1]-(d/2), srodek[2]-(h/2)};
+    tmp = {srodek[0] - (w / 2), srodek[1] - (d / 2), srodek[2] - (h / 2)};
     wspol.push_back(tmp);
 }
-
